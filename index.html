@@ -1058,32 +1058,42 @@ function updateSyncStatus(msg) {
   el.innerHTML = `✅ Aktiv · Kode: <code style="background:var(--surface3);padding:2px 7px;border-radius:5px;color:var(--duo-green-hi);">${SYNC.code}</code> · Sist synkt: ${last}${msg ? '<br>' + msg : ''}`;
 }
 
+let syncEditMode = false;
+
 function renderSyncForm() {
   const form = document.getElementById('sync-form');
   if (!form) return;
   const configured = isSyncConfigured();
-  if (configured) {
+  if (configured && !syncEditMode) {
     form.innerHTML = `
       <div class="backup-row" style="justify-content:flex-start;">
         <button class="reset-btn" onclick="syncPull()">🔄 Hent fra sky</button>
         <button class="reset-btn" onclick="syncPush()">⬆️ Send til sky</button>
-        <button class="reset-btn" onclick="clearSyncConfig()">⚙️ Endre oppsett</button>
+        <button class="reset-btn" onclick="enterSyncEdit()">⚙️ Endre oppsett</button>
+        <button class="reset-btn" onclick="clearSyncConfig()">🔌 Koble fra</button>
       </div>
     `;
   } else {
+    const urlVal = (SYNC.url || '').replace(/"/g, '&quot;');
+    const keyVal = (SYNC.anonKey || '').replace(/"/g, '&quot;');
+    const codeVal = (SYNC.code || '').replace(/"/g, '&quot;');
     form.innerHTML = `
       <div style="display:flex; flex-direction:column; gap:10px;">
-        <input id="sync-url" placeholder="Supabase Project URL (https://xxx.supabase.co)" style="background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-size:0.85rem; outline:none;"/>
-        <input id="sync-key" placeholder="Supabase anon public key" style="background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-size:0.85rem; outline:none;"/>
-        <input id="sync-code" placeholder="Sync-kode (skriv det samme på alle enheter, f.eks. guffe-tent-x9k)" style="background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-size:0.85rem; outline:none;"/>
+        <input id="sync-url" value="${urlVal}" placeholder="Supabase Project URL (https://xxx.supabase.co)" style="background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-size:0.85rem; outline:none;"/>
+        <input id="sync-key" value="${keyVal}" placeholder="Supabase anon public key" style="background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-size:0.85rem; outline:none;"/>
+        <input id="sync-code" value="${codeVal}" placeholder="Sync-kode (samme på alle enheter, f.eks. guffe-tent-x9k)" style="background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-size:0.85rem; outline:none;"/>
         <div class="backup-row" style="justify-content:flex-start; margin-top:4px;">
-          <button class="nav-btn primary" onclick="saveSyncForm()" style="box-shadow:0 3px 0 #6d28d9;">🔗 Koble til</button>
+          <button class="nav-btn primary" onclick="saveSyncForm()" style="box-shadow:0 3px 0 #6d28d9;">${configured ? '💾 Lagre' : '🔗 Koble til'}</button>
+          ${configured ? '<button class="reset-btn" onclick="exitSyncEdit()">Avbryt</button>' : ''}
         </div>
       </div>
     `;
   }
   updateSyncStatus();
 }
+
+function enterSyncEdit() { syncEditMode = true; renderSyncForm(); }
+function exitSyncEdit() { syncEditMode = false; renderSyncForm(); }
 
 function saveSyncForm() {
   const url = document.getElementById('sync-url').value.trim().replace(/\/$/, '');
@@ -1093,6 +1103,7 @@ function saveSyncForm() {
   if (!/^https:\/\/.+\.supabase\.co$/.test(url)) { showToast('URL må være https://xxx.supabase.co'); return; }
   SYNC = { url, anonKey: key, code, lastSync: 0 };
   saveSyncConfig(SYNC);
+  syncEditMode = false;
   renderSyncForm();
   syncPull().then(() => syncPush());
   showToast('🔗 Sync aktiv', 'win');
