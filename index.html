@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treningslære 2 – Tentamensforberedelse</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #242736;
+    --border: #2e3347;
+    --accent: #6c8ef5;
+    --accent2: #4fd1c5;
+    --text: #e8eaf0;
+    --muted: #8890a8;
+    --green: #48bb78;
+    --red: #fc8181;
+    --yellow: #f6c343;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header h1 { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+  header p { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+  .mode-tabs {
+    display: flex;
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 4px;
+    gap: 4px;
+  }
+  .mode-tab {
+    padding: 8px 16px;
+    border-radius: 7px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .mode-tab.active {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* MAIN */
+  main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+
+  /* SECTION HEADERS */
+  .section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  /* TOPIC FILTER */
+  .topic-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .topic-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .topic-btn.active { color: #fff; border-color: transparent; }
+  .topic-btn[data-topic="alle"].active { background: var(--accent); }
+  .topic-btn[data-topic="prinsipper"].active { background: #7c5cbf; }
+  .topic-btn[data-topic="belastning"].active { background: #e05252; }
+  .topic-btn[data-topic="testing"].active { background: #e09340; }
+  .topic-btn[data-topic="mental"].active { background: #3b9e78; }
+  .topic-btn[data-topic="periodisering"].active { background: #3b7de8; }
+  .topic-btn[data-topic="energi"].active { background: #c44fb5; }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap {
+    background: var(--surface2);
+    border-radius: 6px;
+    height: 6px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    border-radius: 6px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+  .progress-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* FLASHCARD */
+  .flashcard-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .card-counter {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .flashcard {
+    width: 100%;
+    max-width: 600px;
+    min-height: 260px;
+    perspective: 1000px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  .flashcard-inner {
+    position: relative;
+    width: 100%;
+    min-height: 260px;
+    transition: transform 0.5s ease;
+    transform-style: preserve-3d;
+  }
+  .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute;
+    width: 100%;
+    min-height: 260px;
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .card-front {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+  }
+  .card-back {
+    background: var(--surface2);
+    border: 1.5px solid var(--accent);
+    transform: rotateY(180deg);
+  }
+  .card-topic-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+    opacity: 0.7;
+  }
+  .card-question {
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .card-hint {
+    margin-top: 20px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: center;
+  }
+  .card-answer {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .card-source {
+    margin-top: 16px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+
+  /* CARD NAV */
+  .card-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .nav-btn {
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .nav-btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .shuffle-btn {
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .shuffle-btn:hover { color: var(--text); border-color: var(--muted); }
+
+  /* TOPIC COLORS */
+  .topic-prinsipper .card-topic-badge { color: #a78bfa; }
+  .topic-belastning .card-topic-badge { color: #fc8181; }
+  .topic-testing .card-topic-badge { color: #f6ad55; }
+  .topic-mental .card-topic-badge { color: #68d391; }
+  .topic-periodisering .card-topic-badge { color: #63b3ed; }
+  .topic-energi .card-topic-badge { color: #e879f9; }
+
+  .topic-prinsipper.card-back { border-color: #a78bfa; }
+  .topic-belastning.card-back { border-color: #fc8181; }
+  .topic-testing.card-back { border-color: #f6ad55; }
+  .topic-mental.card-back { border-color: #68d391; }
+  .topic-periodisering.card-back { border-color: #63b3ed; }
+  .topic-energi.card-back { border-color: #e879f9; }
+
+  /* EXAM MODE */
+  .exam-list { display: flex; flex-direction: column; gap: 20px; }
+  .exam-task {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .exam-task-header {
+    padding: 18px 22px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .task-badge {
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .task-badge.op2 { background: #7c5cbf; }
+  .exam-question { font-size: 1rem; line-height: 1.6; color: var(--text); }
+  .exam-tips {
+    padding: 0 22px 14px 22px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .exam-tips span { color: var(--yellow); }
+  .answer-area {
+    margin: 0 22px 16px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .answer-area textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 0.92rem;
+    line-height: 1.7;
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+  }
+  .answer-area textarea::placeholder { color: var(--muted); }
+  .reveal-btn {
+    margin: 0 22px 20px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: block;
+  }
+  .reveal-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+  .model-answer {
+    display: none;
+    margin: 0 22px 22px;
+    background: var(--surface2);
+    border: 1.5px solid var(--accent2);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .model-answer.visible { display: block; }
+  .model-answer h4 {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent2);
+    margin-bottom: 12px;
+  }
+  .model-answer-text {
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: var(--text);
+    white-space: pre-line;
+  }
+  .model-answer-source {
+    margin-top: 14px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+
+  /* EMPTY STATE */
+  .empty { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 0.95rem; }
+
+  /* RESPONSIVE */
+  @media (max-width: 520px) {
+    header { flex-direction: column; align-items: flex-start; }
+    .card-face { padding: 22px 20px; }
+    .card-question { font-size: 1rem; }
+  }
+
+  /* HIDDEN */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Treningslære 2 – Tentamensforberedelse</h1>
+    <p>VG3 3IDA · Lørenskog VGS · Vår 2026</p>
+  </div>
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="setMode('flashcard')">Flashkort</button>
+    <button class="mode-tab" onclick="setMode('exam')">Øvingstentamen</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- FLASHCARD MODE -->
+  <div id="flashcard-mode">
+    <p class="section-title">Velg tema</p>
+    <div class="topic-filter">
+      <button class="topic-btn active" data-topic="alle" onclick="filterTopic('alle', this)">Alle (50)</button>
+      <button class="topic-btn" data-topic="prinsipper" onclick="filterTopic('prinsipper', this)">Treningsprinsipper</button>
+      <button class="topic-btn" data-topic="belastning" onclick="filterTopic('belastning', this)">Belastning & overtrening</button>
+      <button class="topic-btn" data-topic="testing" onclick="filterTopic('testing', this)">Testing & spenst</button>
+      <button class="topic-btn" data-topic="mental" onclick="filterTopic('mental', this)">Mental trening</button>
+      <button class="topic-btn" data-topic="periodisering" onclick="filterTopic('periodisering', this)">Periodisering</button>
+      <button class="topic-btn" data-topic="energi" onclick="filterTopic('energi', this)">Energiomsetning</button>
+    </div>
+
+    <div class="progress-label">
+      <span id="progress-text">Kort 1 av 50</span>
+      <span id="progress-pct">0%</span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progress-bar" style="width:2%"></div>
+    </div>
+
+    <div class="flashcard-area">
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="flashcard-inner" id="flashcard-inner">
+          <div class="card-face card-front" id="card-front">
+            <div class="card-topic-badge" id="card-badge"></div>
+            <div class="card-question" id="card-question"></div>
+            <div class="card-hint">Klikk for å se svaret</div>
+          </div>
+          <div class="card-face card-back" id="card-back">
+            <div class="card-topic-badge" id="card-badge-back"></div>
+            <div class="card-answer" id="card-answer"></div>
+            <div class="card-source" id="card-source"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-nav">
+        <button class="nav-btn" onclick="prevCard()">← Forrige</button>
+        <button class="nav-btn primary" onclick="nextCard()">Neste →</button>
+        <button class="shuffle-btn" onclick="shuffleCards()">🔀 Bland</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAM MODE -->
+  <div id="exam-mode" class="hidden">
+    <p class="section-title">Øv på tentamensoppgaver – skriv svar og se modellsvar</p>
+    <div class="exam-list" id="exam-list"></div>
+  </div>
+
+</main>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+
+const TOPICS = {
+  prinsipper: 'Treningsprinsipper',
+  belastning: 'Belastning & overtrening',
+  testing: 'Testing & spenst',
+  mental: 'Mental trening',
+  periodisering: 'Periodisering',
+  energi: 'Energiomsetning'
+};
+
+const CARDS = [
+  // TRENINGSPRINSIPPER
+  { topic: 'prinsipper', q: 'Hva er prinsippet om belastning og tilpasning?', a: 'Trening må gi kroppen en belastning sterkere enn den er vant til (overload) for at kroppen skal tilpasse seg og forbedre seg. Uten tilstrekkelig stimuli skjer ingen fremgang.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 42' },
+  { topic: 'prinsipper', q: 'Hva er restitusjonsprinsippet?', a: 'Mellom treningsøktene må det gis tilstrekkelig hvile slik at kroppen kan bygge seg opp igjen og nå et høyere prestasjonsnivå enn før. Uten restitusjon ingen fremgang.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 44' },
+  { topic: 'prinsipper', q: 'Hva er superkompensasjon (overkompensasjon)?', a: 'Etter riktig belastning og tilstrekkelig restitusjon stiger prestasjonsnivået over utgangspunktet. Kroppen overkompenserer for å være bedre rustet neste gang den utsettes for samme belastning.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 44' },
+  { topic: 'prinsipper', q: 'Hva er periodiseringsprinsippet?', a: 'Treningen organiseres i perioder med varierende belastning – forberedelsesperiode, konkurranseperiode og aktiv avkoblingsperiode – for å nå toppform til riktig tidspunkt.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 46' },
+  { topic: 'prinsipper', q: 'Hva er variasjonsprinsippet?', a: 'Treningen bør varieres for å unngå ensidighet, overbelastning og psykisk stagnasjon. Variasjon stimulerer ulike egenskaper og opprettholder motivasjonen.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 47' },
+  { topic: 'prinsipper', q: 'Hva er progresjonsprinsippet?', a: 'Treningsbelastningen må økes gradvis over tid ettersom kroppen tilpasser seg. Stagnerer belastningen, stagnerer fremgangen. Progresjonen kan skje gjennom økt volum, intensitet eller frekvens.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 47' },
+  { topic: 'prinsipper', q: 'Hva er prinsippet om individuell og helhetlig stimulering?', a: 'Treningen må tilpasses den enkeltutøveren og ta hensyn til alle aspekter: fysisk, psykisk, teknisk og taktisk. Det som fungerer for én utøver trenger ikke fungere for en annen.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 48' },
+  { topic: 'prinsipper', q: 'Hva er spesifisitetsprinsippet?', a: 'Treningseffekten er spesifikk for den typen trening som gjennomføres – type øvelse, muskelgruppe, energisystem og bevegelsesmønster. Man må trene det man vil bli bedre på.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 48' },
+  { topic: 'prinsipper', q: 'Hva er prinsippet om styring og kontroll?', a: 'Treningen bør planlegges, registreres (treningsdagbok) og evalueres kontinuerlig for å sikre at man er på rett vei mot målene og kan justere ved behov.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 49' },
+  { topic: 'prinsipper', q: 'Hva er kontinuitetsprinsippet?', a: 'Treningen må være regelmessig og kontinuerlig. Lange pauser fører til tap av tilpasninger (detraining/detrenering). Det tar kortere tid å gjenvinne formen enn å bygge den opp.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 49' },
+
+  // BELASTNING & OVERTRENING
+  { topic: 'belastning', q: 'Hva består treningsbelastning av?', a: 'Treningsbelastning = volum × intensitet × frekvens.\n• Volum: total mengde trening (km, kg, antall repetisjoner)\n• Intensitet: hardhet (% av maks puls, % av 1RM)\n• Frekvens: antall treningsøkter per uke', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 40' },
+  { topic: 'belastning', q: 'Hva er DOMS?', a: 'Delayed Onset Muscle Soreness – forsinket muskelsårhet som oppstår 24–48 timer etter uvant eller hard trening. Skyldes mikroskader i muskelvevet. Er en normal reaksjon og forsvinner etter noen dager.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 45' },
+  { topic: 'belastning', q: 'Hva er overreaching?', a: 'Kortvarig tilstand der kroppen ikke klarer å restituere seg mellom øktene. Kjennetegn: tretthet, lett prestasjonsnedgang. Kan rettes opp med noen ekstra hviledager. Ikke det samme som overtrening.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 50' },
+  { topic: 'belastning', q: 'Hva er overtrening?', a: 'Langvarig tilstand der kroppen ikke klarer å restituere seg, til tross for hvile. Kjennetegn: vedvarende prestasjonsnedgang, utmattelse, humørsvingninger, søvnproblemer, økt sykdomsrisiko. Kan ta måneder å komme seg av.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 50–51' },
+  { topic: 'belastning', q: 'Hva er sammenhengen mellom belastning, restitusjon og superkompensasjon?', a: 'Riktig belastning + tilstrekkelig restitusjon = superkompensasjon og fremgang.\nFor mye belastning uten nok hvile = kumulativ tretthet → overtrening → tilbakegang.\nFor lite belastning = ingen tilpasning.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 44' },
+  { topic: 'belastning', q: 'Hva er aktiv restitusjon?', a: 'Lett aktivitet som rolig jogging, svømming eller tøying etter hardt arbeid. Fremmer blodsirkulasjon og fjerning av avfallsstoffer (laktat) uten å belaste kroppen ytterligere. Gir raskere restitusjon enn passiv hvile.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 45' },
+  { topic: 'belastning', q: 'Nevn fem tegn på overtrening.', a: '1. Vedvarende tretthet til tross for hvile\n2. Prestasjonsnedgang over tid\n3. Humørsvingninger og irritabilitet\n4. Søvnproblemer\n5. Økt hvilepuls og økt sykdomsrisiko', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 51' },
+  { topic: 'belastning', q: 'Hva skjer om man trener igjen for tidlig (før restitusjon er fullført)?', a: 'Neste treningsøkt starter på et lavere nivå enn etter fullstendig restitusjon. Over tid bygger kumulativ tretthet seg opp, prestasjonsnivået synker gradvis, og overtrening kan oppstå.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 44' },
+
+  // TESTING & SPENST
+  { topic: 'testing', q: 'Hva er reliabilitet (i testing)?', a: 'Pålitelighet: testen gir samme resultat ved gjentatte målinger under like forhold. En reliabel test er konsistent og reproduserbar. Eksempel: samme sprinter løper 100m tre ganger og får nesten identiske tider.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 98' },
+  { topic: 'testing', q: 'Hva er validitet (i testing)?', a: 'Gyldighet: testen måler faktisk det den er ment å måle. En valid spenst-test måler spenst – ikke kraft, koordinasjon eller noe annet. En test kan være reliabel uten å være valid.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 98' },
+  { topic: 'testing', q: 'Hva er et testbatteri?', a: 'En samling av ulike tester som til sammen gir et helhetlig bilde av utøverens kapasitet. Inkluderer gjerne tester for utholdenhet, styrke, spenst, hurtighet og bevegelighet.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 100' },
+  { topic: 'testing', q: 'Hva er CMJ (Counter Movement Jump)?', a: 'Vertikal spenst-test. Starter oppreist, senker seg ned i en rask nedsenk og hopper rett opp. Utnytter strekk-forkortningssyklusen (elastisk energi i sener og muskler). Relevant for håndball, volleyball og basketball.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 103; Olympiatoppen' },
+  { topic: 'testing', q: 'Hva er SJ (Squat Jump)?', a: 'Vertikal spenst-test. Starter i statisk knebøy (~90°), holder stillingen noen sekunder og hopper opp uten forutgående nedsenk. Isolerer den konsentriske (positive) kraften uten bidrag fra elastisk energi.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 103' },
+  { topic: 'testing', q: 'Hva er Five Jump Test?', a: 'Horisontal spenst-test. Fem hopp fremover uten stopp. Måler eksplosiv horisontal kraft og koordinasjon. Relevant for fotball, løp og håndball. Enkel å gjennomføre uten utstyr.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 104' },
+  { topic: 'testing', q: 'Hva er forskjellen på vertikal og horisontal spenst?', a: 'Vertikal spenst = hopp rett opp. Relevant i basketball, volleyball, håndball (blokkering, skudd).\nHorisontal spenst = hopp framover. Relevant i sprint, fotball, friidrett (lengdehopp).\nNoen idretter krever begge typer.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 102' },
+  { topic: 'testing', q: 'Nevn to idretter som krever spenst og forklar hvorfor.', a: 'Basketball: krever vertikal spenst for å nå kurven ved skudd og retur.\nFotball: krever horisontal spenst for eksplosive akselerasjoner og vertikal spenst for hodedueller.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 102' },
+  { topic: 'testing', q: 'Hvorfor kan CMJ være en god test i volleyball, men ikke i svømming?', a: 'I volleyball er vertikal spenst direkte relevant (hopp ved blokk og smasj). CMJ tester nettopp denne egenskapen – valid test.\nI svømming er horisontal spenst og teknikk i vannet avgjørende, ikke vertikal spenst. CMJ mangler validitet for svømmere.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 98–103' },
+  { topic: 'testing', q: 'Hva er arbeidskravsanalyse?', a: 'En systematisk analyse av hva idretten krever av utøveren: hvilke fysiske egenskaper (utholdenhet, styrke, spenst, hurtighet), psykiske krav, tekniske krav og taktiske krav. Grunnlag for riktig treningsplanlegging.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 20' },
+
+  // MENTAL TRENING
+  { topic: 'mental', q: 'Hva er Banduras fire kilder til selvtillit?', a: '1. Mestringsopplevelse: egne erfaringer med å lykkes (sterkeste kilde)\n2. Vikarierende erfaring: se andre med likt utgangspunkt lykkes\n3. Verbal overtalelse: oppmuntring fra trener/lagkamerater\n4. Fysiologisk og emosjonell tilstand: tolke nervøsitet som positiv energi', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 45' },
+  { topic: 'mental', q: 'Hvilken av Banduras fire kilder er sterkest og hvorfor?', a: 'Mestringsopplevelse er den sterkeste kilden. Å faktisk mestre noe selv gir den mest varige og stabile selvtilliten. Det er vanskeligere å argumentere bort egne erfaringer enn andres meninger.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 45' },
+  { topic: 'mental', q: 'Hva er Olympiatoppens modell for mental trening?', a: 'Tre nivåer:\n1. Mentale basisteknikker: målsetting, avspenning, visualisering, indre dialog\n2. Mentale ferdigheter: selvtillit, motivasjon, konsentrasjon, spenningsregulering, mestring av stress\n3. Mental robusthet: evnen til å prestere under press', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal; Olympiatoppen' },
+  { topic: 'mental', q: 'Hva er visualisering (bildedanning)?', a: 'Mental forestilling av bevegelser, situasjoner eller mål. Hjernen aktiverer mange av de samme nervebaner som ved faktisk utførelse. PETTLEP-prinsippene beskriver effektiv visualisering (Physical, Environment, Task, Timing, Learning, Emotion, Perspective).', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 78' },
+  { topic: 'mental', q: 'Hva er indre dialog?', a: 'De tankene vi snakker til oss selv med. Kan være positiv (affirmasjoner: "jeg kan dette", "fokus nå") eller negativ (tankesopp). Bevisst positiv indre dialog styrker selvtillit og opprettholder fokus under press.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 65' },
+  { topic: 'mental', q: 'Hva er spenningsregulering?', a: 'Evnen til å regulere aktiveringsnivået til et optimalt nivå. For høy spenning gir angst og stivhet. For lav spenning gir manglende fokus og dårlig prestasjon. Teknikker: kontrollert pust, progressiv avspenning, aktiveringsrutiner.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 55' },
+  { topic: 'mental', q: 'Hva er SMARTERE-mål?', a: 'S – Spesifikke\nM – Målbare\nA – Aksepterte (av utøveren)\nR – Realistiske\nT – Tidsbegrensede\nE – Evaluerte\nR – Reviderte\n\nRammeverk for effektiv målsetting i idrett.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 32' },
+  { topic: 'mental', q: 'Hva er forskjellen på resultat-, prestasjons- og prosessmål?', a: 'Resultatmål: fokus på utfall (vinne gull). Vanskelig å kontrollere.\nPrestasjonsmål: fokus på egne prestasjoner (løpe under 12 sek på 100m). Delvis kontrollerbart.\nProsessmål: fokus på hva man gjør (riktig teknikk ved hvert skudd). Fullt kontrollerbart.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 30–31' },
+  { topic: 'mental', q: 'Hva er konsentrasjon i idretts­sammenheng?', a: 'Evnen til å rette og holde oppmerksomheten mot relevante stimuli. Dimensjoner:\n• Bred/smal fokus\n• Intern/ekstern fokus\nGode utøvere kan skifte mellom disse etter behov.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 70' },
+  { topic: 'mental', q: 'Hva er en konkurranseplan?', a: 'En strukturert mental plan for hva utøveren skal tenke og gjøre:\n• Før-konkurranseplanen: oppvarming, mentale rutiner\n• Konkurranseplanen: fokuspunkter underveis\n• Refokuseringsplanen: hva gjøres om noe går galt', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 85' },
+  { topic: 'mental', q: 'Nevn to øvelser som kan bygge opp selvtillit i en idrett (Banduras modell).', a: 'Eksempel: fotball\n1. Mestringsoppgaver i trening: øvelser der spilleren nesten alltid lykkes (lette pasninger, kjente situasjoner) → mestringsopplevelse.\n2. Mentoring/modellæring: se og analysere videoklipp av vellykkede prestasjoner fra seg selv eller andre → vikarierende erfaring.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 45–48' },
+
+  // PERIODISERING
+  { topic: 'periodisering', q: 'Hva er en forberedelsesperiode?', a: 'Første periode i treningsåret. Kjennetegn: høyt volum, lav/moderat intensitet. Mål: bygge opp grunnleggende kondisjon, styrke og teknikk. Teknikkarbeid viktig, lite konkurranse-spesifikk trening.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 58' },
+  { topic: 'periodisering', q: 'Hva er en konkurranseperiode?', a: 'Perioden der utøveren konkurrerer. Kjennetegn: lavere volum, høy intensitet, spesifikt treningsinnhold. Mål: opprettholde og toppe formen. Treningsinnholdet ligner konkurransen så mye som mulig.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 59' },
+  { topic: 'periodisering', q: 'Hva er aktiv avkoblingsperiode?', a: 'Perioden etter konkurranse-sesongen. Kjennetegn: lav belastning, stor variasjon, fokus på restitusjon. Mål: la kropp og sinn restituere seg. Bør ikke være total inaktivitet – aktiv hvile er bedre.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 60' },
+  { topic: 'periodisering', q: 'Hva skjer med volum og intensitet gjennom en sesong?', a: 'Forberedelse → Konkurranse:\n• Volum: synker gradvis\n• Intensitet: øker gradvis\nVolum og intensitet er omvendt proporsjonale. Dette fordi kroppen ikke klarer å håndtere maksimalt av begge samtidig over tid.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 58–59' },
+  { topic: 'periodisering', q: 'Hva er kapasitetsanalyse?', a: 'Analyse av utøverens nåværende kapasitet sammenlignet med arbeidskravene i idretten. Identifiserer styrker og svakheter. Grunnlag for å prioritere hva som skal trenes mest.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 25' },
+  { topic: 'periodisering', q: 'Nevn de fem plantypene i treningsplanlegging.', a: '1. Langtidsplan (4–8 år): karriereutvikling\n2. Årsplan: hele treningsåret\n3. Periodeplan: en treningsperiode (8–16 uker)\n4. Ukeplan: én uke\n5. Øktplan: én treningsøkt', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 55' },
+  { topic: 'periodisering', q: 'Hva er en treningsdagbok og hvorfor er den nyttig?', a: 'En systematisk registrering av gjennomført trening (innhold, belastning, restitusjon, subjektiv følelse). Nyttig fordi den: gir grunnlag for evaluering, hjelper å unngå overtrening, og gjør det mulig å identifisere hva som fungerer.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 65' },
+  { topic: 'periodisering', q: 'Hva er tapering?', a: 'Gradvis reduksjon av treningsvolum (15–60%) i ukene før en viktig konkurranse, mens intensiteten opprettholdes. Gir kroppen tid til å restituere seg fullt ut og nå toppen av superkompensasjon på konkurransedagen.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 60' },
+
+  // ENERGIOMSETNING
+  { topic: 'energi', q: 'Hva er aerob energifrigjøring?', a: 'Energifrigjøring med tilstede-værende oksygen. Bruker fett og karbohydrat som drivstoff. Gir mye energi, men saktere enn anaerobt. Dominerer ved aktiviteter over ca. 2 minutter. Ingen melkesyreopphopning.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 12–14' },
+  { topic: 'energi', q: 'Hva er anaerob energifrigjøring?', a: 'Energifrigjøring uten oksygen. Gir energi raskt, men i begrensede mengder. To systemer:\n1. ATP-CP (fosfatsystem): 0–10 sek\n2. Anaerob glykolyse (laktatsystem): 10 sek–2 min\nGir melkesyreoppbygning ved høy intensitet.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 11–13' },
+  { topic: 'energi', q: 'Hva er ATP-CP-systemet (fosfatsystemet)?', a: 'Kroppens raskeste energisystem. Bruker fosfatkreatin lagret direkte i muskelcellene. Varighet: 0–10 sekunder. Ingen melkesyre. Viktig i sprint, hopp og eksplosive kast. Restitueres raskt (1–5 min).', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 11' },
+  { topic: 'energi', q: 'Hva er VO₂maks?', a: 'Maksimalt oksygenopptak – den øverste grensen for aerob kapasitet. Måles i ml O₂ per kg kroppsvekt per minutt. Viktig mål for utholdenhet. Høy VO₂maks er nødvendig i langdistanseløp, langrenn og sykling.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 18' },
+  { topic: 'energi', q: 'Hva er melkesyreterske (anaerob terskel)?', a: 'Det intensitetsnivået der laktatproduksjonen overstiger kroppens evne til å fjerne det. Over terskelen stiger laktatnivået raskt, og utmattelse inntreffer. Trening nær og over terskelen er svært effektivt for å heve den.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 16' },
+  { topic: 'energi', q: 'Hva bestemmer hvilket energisystem som dominerer?', a: 'Primært intensitet og varighet:\n• Svært høy intensitet, kort varighet (0–10 sek) → ATP-CP\n• Høy intensitet, moderat varighet (10 sek–2 min) → Anaerob glykolyse\n• Moderat intensitet, lang varighet (>2 min) → Aerob metabolisme', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 10–14' }
+];
+
+// ─── EXAM QUESTIONS ──────────────────────────────────────────────────────────
+
+const EXAM_TASKS = [
+  {
+    badge: '1A',
+    question: 'Nevn to idrettsaktiviteter som stiller krav til spenst. Gjør rede for en test du mener er god i den ene idrettsaktiviteten, men ikke den andre. Begrunn svaret.',
+    tips: '«Nevn» = bare oppgi. «Gjør rede for» = nevn + definer + beskriv slik at du viser forståelse. Koble testen til den spesifikke idrettens krav (validitet).',
+    placeholder: 'Skriv svaret ditt her...\n\nTips: Start med å velge to idretter → beskriv spenst-kravene i hver → presenter én test → forklar hvorfor den passer for idrett A men ikke idrett B.',
+    modelAnswer: `INNLEDNING
+Spenst er evnen til å utvikle stor kraft i løpet av kort tid og er en sentral egenskap i mange idretter. I dette svaret tar jeg for meg volleyball og svømming, og vurderer om CMJ er en egnet test for begge.
+
+IDRETTENES KRAV TIL SPENST
+Volleyball krever vertikal spenst. Spillerne hopper gjentatte ganger for å smasje, blokkere og ta imot ballen. Eksplosiv oppover-kraft er direkte avgjørende for prestasjon (Gjerset m.fl., 2012, s. 102).
+
+Svømming krever primært aerob utholdenhet, kraft i vannet og god teknikk. Vertikal spenst er lite relevant for selve svømmeprestasjon, bortsett fra dykket fra startblokken.
+
+TESTEN: CMJ (Counter Movement Jump)
+CMJ er en vertikal spenst-test der utøveren raskt senker seg ned og hopper rett opp. Testen måler eksplosiv vertikal kraft og utnyttelse av strekk-forkortningssyklusen (Gjerset m.fl., 2012, s. 103).
+
+VURDERING AV TESTENS GYLDIGHET
+CMJ er valid for volleyball fordi testen måler nettopp den egenskapen som er avgjørende i idretten – vertikal spenst. Høy score på CMJ vil korrelere med bedre prestasjon i kamp.
+
+CMJ er ikke valid for svømmere fordi testen ikke gjenspeiler de kravene svømmingen stiller. En god score vil ikke nødvendigvis si noe om svømmeprestasjon. Testen mangler dermed validitet i denne sammenhengen (Gjerset m.fl., 2012, s. 98).
+
+KONKLUSJON
+CMJ er en god test for volleyball fordi den er valid – den måler det idretten faktisk krever. For svømmere gir testen lite nyttig informasjon og er derfor ikke hensiktsmessig.`,
+    sources: 'Gjerset, A., Haugen, K. & Holmstad, P. (2012). Treningslære 2. Gyldendal Norsk Forlag, s. 98–103.'
+  },
+  {
+    badge: '1B',
+    question: 'Gjør rede for sammenhengen mellom treningsbelastning, restitusjon og overtrening.',
+    tips: '«Gjør rede for» = nevn + definer + beskriv. Vis at du forstår sammenhengen – bruk superkompensasjonskurven som rød tråd. Nevn overreaching som et steg på veien.',
+    placeholder: 'Skriv svaret ditt her...\n\nTips: Definer begrepene → beskriv superkompensasjon → forklar hva som skjer ved for mye belastning/for lite restitusjon → definer overreaching vs. overtrening.',
+    modelAnswer: `INNLEDNING
+For å utvikle seg som utøver må man finne balansen mellom nok treningsbelastning og tilstrekkelig restitusjon. Velter denne balansen, risikerer man overtrening.
+
+TRENINGSBELASTNING
+Treningsbelastning er summen av volum (mengde), intensitet (hardhet) og frekvens (antall økter) i treningen (Gjerset m.fl., 2012, s. 40). En belastning over det kroppen er vant til er nødvendig for å utløse tilpasning – dette kalles prinsippet om overload.
+
+RESTITUSJON OG SUPERKOMPENSASJON
+Etter trening er kroppen svekket av belastningen. I restitusjonsfasen repareres skader, energilagre fylles opp, og kroppen bygger seg opp sterkere enn før – et fenomen kalt superkompensasjon (Gjerset m.fl., 2012, s. 44). Det er under restitusjon, ikke under selve treningen, at fremgangen skjer.
+
+KONSEKVENSER AV UBALANSE
+Dersom neste treningsøkt startes for tidlig – før kroppen er ferdig restituert – begynner man på et lavere nivå. Gjentas dette over tid, vil man oppleve:
+
+1. Overreaching: kortvarig overbelastning. Kjennetegn: tretthet og lett prestasjonsnedgang. Lar seg rette opp med noen ekstra hviledager (Gjerset m.fl., 2012, s. 50).
+
+2. Overtrening: langvarig tilstand der kroppen ikke lenger klarer å restituere seg. Kjennetegn: vedvarende prestasjonsnedgang, utmattelse, humørsvingninger, økt hvilepuls, søvnproblemer og økt sykdomsrisiko. Kan ta måneder å komme seg av (Gjerset m.fl., 2012, s. 50–51).
+
+KONKLUSJON
+Riktig treningsbelastning kombinert med tilstrekkelig restitusjon gir superkompensasjon og fremgang. Ignoreres restitusjon, kan kortvarig overreaching utvikle seg til kronisk overtrening med store negative konsekvenser for utøverens helse og prestasjon.`,
+    sources: 'Gjerset, A., Haugen, K. & Holmstad, P. (2012). Treningslære 2. Gyldendal Norsk Forlag, s. 40–51.'
+  },
+  {
+    badge: '1C',
+    question: 'Velg en idrettsaktivitet. Gjør rede for to øvelser du mener kan brukes for å bygge opp god selvtillit hos utøvere i denne idrettsaktiviteten.',
+    tips: '«Gjør rede for» = nevn + definer + beskriv. Bruk Banduras modell for selvtillit som teoretisk grunnlag. Koble øvelsene eksplisitt til kildene til selvtillit.',
+    placeholder: 'Skriv svaret ditt her...\n\nTips: Velg én idrett → presenter Banduras fire kilder (kort) → beskriv øvelse 1 og koble til en kilde → beskriv øvelse 2 og koble til en annen kilde.',
+    modelAnswer: `INNLEDNING
+Selvtillit er troen på egne evner til å gjennomføre en bestemt oppgave. I idrett er selvtillit avgjørende for prestasjon. Jeg tar utgangspunkt i håndball og presenterer to øvelser basert på Banduras (1997, gjengitt i Pensgaard & Hollingen, 2006, s. 45) modell for selvtillit.
+
+BANDURAS FIRE KILDER TIL SELVTILLIT
+Bandura beskriver fire kilder:
+1. Mestringsopplevelse (egne erfaringer med å lykkes) – sterkeste kilde
+2. Vikarierende erfaring (se andre lykkes)
+3. Verbal overtalelse (oppmuntring fra trener/lagkamerater)
+4. Fysiologisk og emosjonell tilstand
+
+ØVELSE 1 – Graderte skuddøvelser (kilde: mestringsopplevelse)
+Spillerne øver på avslutninger fra posisjoner der de nesten alltid scorer – nær mål, uten keeper, med god tid. Vanskegraden økes gradvis etter hvert som spilleren mestrer. Denne øvelsen benytter Banduras sterkeste kilde: mestringsopplevelse. Å lykkes gang på gang gir utøveren konkrete bevis på egne ferdigheter, noe som bygger stabil selvtillit (Pensgaard & Hollingen, 2006, s. 45–46).
+
+ØVELSE 2 – Videoanalyse av egne vellykkede prestasjoner (kilde: vikarierende erfaring + fysiologisk tilstand)
+Spillerne ser videoklipp av sine egne gode prestasjoner fra trening og kamp. Treneren guider utøveren til å gjenkjenne hva som ble gjort riktig. Dette aktiverer to av Banduras kilder: utøveren ser "seg selv som modell" (vikarierende erfaring) og kjenner igjen den positive emosjonelle tilstanden ved suksess (fysiologisk tilstand). Metoden brukes blant annet av Olympiatoppen (Pensgaard & Hollingen, 2006, s. 47).
+
+KONKLUSJON
+Begge øvelsene er forankret i Banduras teori og adresserer ulike kilder til selvtillit. Kombinasjonen av konkret mestring i trening og bevisst selvrefleksjon gjennom video er et effektivt verktøy for å styrke selvtilliten i håndball.`,
+    sources: 'Pensgaard, A.M. & Hollingen, E. (2006). Idrettens mentale treningslære. Gyldendal Norsk Forlag, s. 44–50.'
+  },
+  {
+    badge: '1D',
+    question: 'Ta utgangspunkt i en valgt idrettsaktivitet. Gjør rede for de største forskjellene mellom treningsinnholdet i en forberedelsesperiode, en konkurranseperiode og en aktiv avkoblingsperiode.',
+    tips: 'Velg én idrett og hold deg til den gjennom hele svaret. Strukturer gjerne med én del per periode. Fokuser på volum, intensitet og treningsinnhold i hver periode.',
+    placeholder: 'Skriv svaret ditt her...\n\nTips: Innledning med valg av idrett → Forberedelsesperiode (kjennetegn) → Konkurranseperiode (kjennetegn) → Aktiv avkoblingsperiode (kjennetegn) → Konklusjon om hvorfor periodisering er viktig.',
+    modelAnswer: `INNLEDNING
+Periodisering handler om å organisere treningen i ulike perioder med forskjellig innhold og belastning for å nå toppform til riktig tidspunkt (Gjerset m.fl., 2012, s. 57). Jeg tar utgangspunkt i fotball.
+
+FORBEREDELSESPERIODE
+Forberedelsesperioden er årets første treningsperiode, typisk vinter/vår for fotballspillere. Kjennetegn:
+• Høyt treningsvolum, lav til moderat intensitet
+• Fokus på å bygge opp grunnleggende aerob utholdenhet, generell styrke og tekniske basisferdigheter
+• Mye allsidig trening og grunnlagsarbeid
+• Lite spesifikt kamprelatert arbeid
+
+Målet er å legge et solid fundament som konkurranseperioden kan bygges på.
+
+KONKURRANSEPERIODE
+Konkurranseperioden er sesongen da kampene spilles. Kjennetegn:
+• Lavt treningsvolum, høy intensitet
+• Spesifikt treningsinnhold: taktiske øvelser, kamprelatert trening, pasningsspill med press
+• Fokus på å opprettholde og toppe formen
+• Innholdet ligner så mye som mulig på krav i konkurranse (spesifisitetsprinsippet)
+
+Volum reduseres fordi kroppen ikke tåler høy intensitet og høyt volum over lang tid. Selve kampene er en del av treningsbelastningen.
+
+AKTIV AVKOBLINGSPERIODE
+Etter sesongens slutt innføres aktiv avkoblingsperiode. Kjennetegn:
+• Svært lav treningsbelastning
+• Stor variasjon – gjerne andre aktiviteter enn fotball
+• Fokus på fysisk og psykisk restitusjon
+• Ingen konkurranse, ingen krav
+
+"Aktiv" betyr at utøveren fortsatt er i bevegelse – total inaktivitet er negativt fordi form og helse tapes raskt.
+
+KONKLUSJON
+De tre periodene er ulike i volum, intensitet og innhold fordi kroppen trenger ulike stimuli gjennom året. En riktig periodisering sikrer at fotballspilleren er på topp når det gjelder som mest – i konkurranseperioden.`,
+    sources: 'Gjerset, A., Haugen, K. & Holmstad, P. (2012). Treningslære 2. Gyldendal Norsk Forlag, s. 57–61.'
+  },
+  {
+    badge: 'Oppgave 2',
+    op2: true,
+    question: 'Ta utgangspunkt i en valgt idrettsaktivitet, og vurder påstanden:\n\n"I den valgte idrettsaktiviteten din er det ingen av treningsprinsippene som er viktigere enn de andre."',
+    tips: '«Vurder» = fremstill ulike synspunkter, begrunn, se konsekvenser. Du skal IKKE bare si om du er enig eller uenig – vis at du ser begge sider, og trekk en begrunnet konklusjon. Dette er den store oppgaven (~50% av karakteren).',
+    placeholder: 'Skriv svaret ditt her...\n\nStruktur: Innledning (velg idrett, beskriv hva oppgaven spør om) → Presenter alle/de viktigste prinsippene kort → Argumenter FOR påstanden → Argumenter MOT påstanden → Konklusjon med begrunnelse.',
+    modelAnswer: `INNLEDNING
+Treningsprinsippene er grunnleggende retningslinjer for all systematisk trening. Jeg tar utgangspunkt i langrenn og vurderer om alle prinsippene er like viktige, eller om noen er mer avgjørende enn andre.
+
+DE 10 TRENINGSPRINSIPPENE (kort oversikt)
+1. Belastning og tilpasning, 2. Restitusjon, 3. Overkompensasjon/superkompensasjon, 4. Periodisering, 5. Variasjon, 6. Progresjon, 7. Individuell og helhetlig stimulering, 8. Spesifisitet, 9. Styring og kontroll, 10. Kontinuitet (Gjerset m.fl., 2012, s. 42–49).
+
+FOR PÅSTANDEN – prinsippene er like viktige
+Man kan argumentere for at alle prinsippene henger tett sammen og er gjensidig avhengige. Brytes ett prinsipp, svekkes effekten av de andre. Eksempel: trener man hardt (belastning) uten restitusjon, oppstår overtrening uavhengig av om de andre prinsippene følges. Ingen enkelt prinsipp kan alene sikre fremgang – de utgjør et helhetlig system.
+
+MOT PÅSTANDEN – noen prinsipper er viktigere i langrenn
+Langrenn er en aerob utholdenhetsdisiplin der store treningsvolum over lang tid er avgjørende. Følgende prinsipper kan fremheves som særlig kritiske:
+
+Spesifisitetsprinsippet er sentralt: langrennsløpere må trene aerob kapasitet og spesifikk langrenns-teknikk, ikke for eksempel sprinttrening. All annen trening gir liten overføringsverdi til konkurransen.
+
+Kontinuitetsprinsippet er kritisk i langrenn: langrennsform bygges over år. Norges beste langrennsløpere trener 600–900 timer per år over mange år. Avbrudd i treningen gir raskt nedgang i aerob kapasitet.
+
+Periodiseringsprinsippet styrer hele sesongen: tidspunktet for toppform (VM, OL) avgjøres av riktig periodisering. Uten god periodisering kan man ikke nå toppen på riktig tidspunkt.
+
+Variasjonsprinsippet er derimot relativt mindre kritisk i langrenn sammenlignet med tekniske idretter: langrennsløpere kan tåle mer monoton trening fordi belastningen er lavintensivt og belaster kroppen mer jevnt.
+
+KONKLUSJON
+Påstanden er delvis riktig fordi alle prinsippene er nødvendige og henger sammen. Likevel er prinsippene ikke like viktige i langrenn. Spesifisitet, kontinuitet og periodisering er særlig avgjørende fordi formen i langrenn bygges over tid gjennom stor mengde spesifikk trening, og topping av form til riktig tidspunkt er kritisk. Variasjonsprinsippet er fortsatt viktig, men veier litt lettere enn i tekniske idretter. En god langrennsutøver kan ikke utelate noen prinsipper – men prioriteringen av dem vil variere.`,
+    sources: 'Gjerset, A., Haugen, K. & Holmstad, P. (2012). Treningslære 2. Gyldendal Norsk Forlag, s. 42–61.'
+  }
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+
+let currentTopic = 'alle';
+let filteredCards = [...CARDS];
+let currentIndex = 0;
+let isFlipped = false;
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+
+function init() {
+  renderCard();
+  renderExam();
+}
+
+// ─── MODE ────────────────────────────────────────────────────────────────────
+
+function setMode(mode) {
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('flashcard-mode').classList.toggle('hidden', mode !== 'flashcard');
+  document.getElementById('exam-mode').classList.toggle('hidden', mode !== 'exam');
+}
+
+// ─── FILTER ──────────────────────────────────────────────────────────────────
+
+function filterTopic(topic, btn) {
+  currentTopic = topic;
+  document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filteredCards = topic === 'alle' ? [...CARDS] : CARDS.filter(c => c.topic === topic);
+  currentIndex = 0;
+  isFlipped = false;
+  renderCard();
+}
+
+// ─── CARDS ───────────────────────────────────────────────────────────────────
+
+function renderCard() {
+  if (filteredCards.length === 0) return;
+  const card = filteredCards[currentIndex];
+  const fc = document.getElementById('flashcard');
+  fc.classList.remove('flipped');
+  isFlipped = false;
+
+  document.getElementById('card-badge').textContent = TOPICS[card.topic];
+  document.getElementById('card-badge').className = 'card-topic-badge';
+  document.getElementById('card-badge-back').textContent = TOPICS[card.topic];
+  document.getElementById('card-badge-back').className = 'card-topic-badge';
+
+  document.getElementById('card-front').className = `card-face card-front topic-${card.topic}`;
+  document.getElementById('card-back').className = `card-face card-back topic-${card.topic}`;
+
+  document.getElementById('card-question').textContent = card.q;
+  document.getElementById('card-answer').textContent = card.a;
+  document.getElementById('card-source').textContent = '📚 ' + card.src;
+
+  const total = filteredCards.length;
+  const pct = Math.round(((currentIndex + 1) / total) * 100);
+  document.getElementById('progress-text').textContent = `Kort ${currentIndex + 1} av ${total}`;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function flipCard() {
+  const fc = document.getElementById('flashcard');
+  isFlipped = !isFlipped;
+  fc.classList.toggle('flipped', isFlipped);
+}
+
+function nextCard() {
+  if (currentIndex < filteredCards.length - 1) {
+    currentIndex++;
+    renderCard();
+  } else {
+    currentIndex = 0;
+    renderCard();
+  }
+}
+
+function prevCard() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    renderCard();
+  }
+}
+
+function shuffleCards() {
+  for (let i = filteredCards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+  }
+  currentIndex = 0;
+  renderCard();
+}
+
+// ─── EXAM ────────────────────────────────────────────────────────────────────
+
+function renderExam() {
+  const container = document.getElementById('exam-list');
+  container.innerHTML = '';
+  EXAM_TASKS.forEach((task, i) => {
+    const div = document.createElement('div');
+    div.className = 'exam-task';
+    div.innerHTML = `
+      <div class="exam-task-header">
+        <span class="task-badge ${task.op2 ? 'op2' : ''}">${task.badge}</span>
+        <div class="exam-question">${task.question.replace(/\n/g, '<br>')}</div>
+      </div>
+      <div class="exam-tips">💡 <span>Husk:</span> ${task.tips}</div>
+      <div class="answer-area">
+        <textarea placeholder="${task.placeholder}" rows="6"></textarea>
+      </div>
+      <button class="reveal-btn" onclick="revealAnswer(${i}, this)">Vis modellsvar med kildehenvisning</button>
+      <div class="model-answer" id="model-${i}">
+        <h4>Modellsvar</h4>
+        <div class="model-answer-text">${task.modelAnswer}</div>
+        <div class="model-answer-source">📚 ${task.sources}</div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function revealAnswer(i, btn) {
+  const el = document.getElementById(`model-${i}`);
+  const visible = el.classList.toggle('visible');
+  btn.textContent = visible ? 'Skjul modellsvar' : 'Vis modellsvar med kildehenvisning';
+}
+
+// ─── KEYBOARD ────────────────────────────────────────────────────────────────
+
+document.addEventListener('keydown', e => {
+  if (document.getElementById('flashcard-mode').classList.contains('hidden')) return;
+  if (e.key === 'ArrowRight') nextCard();
+  if (e.key === 'ArrowLeft') prevCard();
+  if (e.key === ' ') { e.preventDefault(); flipCard(); }
+});
+
+// ─── START ───────────────────────────────────────────────────────────────────
+
+init();
+</script>
+</body>
+</html>
