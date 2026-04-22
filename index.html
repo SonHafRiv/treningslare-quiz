@@ -6,386 +6,307 @@
 <title>Treningslære 2 – Tentamensforberedelse</title>
 <style>
   :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --surface2: #242736;
-    --border: #2e3347;
-    --accent: #6c8ef5;
-    --accent2: #4fd1c5;
-    --text: #e8eaf0;
-    --muted: #8890a8;
-    --green: #48bb78;
-    --red: #fc8181;
-    --yellow: #f6c343;
-    --radius: 14px;
+    --bg: #0a0a12;
+    --bg-grad: radial-gradient(ellipse 80% 60% at 50% -20%, #1e1b4b33, transparent), radial-gradient(ellipse 60% 50% at 80% 100%, #14532d22, transparent), #0a0a12;
+    --surface: #13131f;
+    --surface2: #1c1c2b;
+    --surface3: #252538;
+    --border: #2a2a3e;
+    --border-hi: #3b3b55;
+    --accent: #8b5cf6;
+    --accent-hi: #a78bfa;
+    --accent-soft: rgba(139,92,246,0.12);
+    --duo-green: #58cc02;
+    --duo-green-hi: #7ee030;
+    --duo-green-soft: rgba(88,204,2,0.13);
+    --duo-gold: #ffc800;
+    --duo-gold-soft: rgba(255,200,0,0.15);
+    --text: #f1f1f5;
+    --muted: #8a8aa3;
+    --muted2: #6a6a85;
+    --green: #58cc02;
+    --red: #ff4b4b;
+    --yellow: #ffc800;
+    --orange: #ff9600;
+    --blue: #1cb0f6;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --radius-lg: 22px;
+    --shadow-card: 0 4px 20px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.04) inset;
+    --shadow-btn-duo: 0 4px 0 rgba(0,0,0,0.25);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    min-height: 100vh;
-  }
+  html, body { overflow-x: hidden; }
+  body { background: var(--bg-grad); color: var(--text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; letter-spacing: -0.011em; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+  @keyframes fall { 0% { transform: translateY(-20vh) rotate(0); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+  @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 0 0 var(--accent-soft); } 50% { box-shadow: 0 0 0 8px transparent; } }
+
+  .confetti { position: fixed; top: 0; width: 10px; height: 14px; z-index: 9999; pointer-events: none; animation: fall linear forwards; border-radius: 2px; }
 
   /* HEADER */
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  header h1 { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
-  header p { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
-  .mode-tabs {
-    display: flex;
-    background: var(--bg);
-    border-radius: 10px;
-    padding: 4px;
-    gap: 4px;
-  }
-  .mode-tab {
-    padding: 8px 16px;
-    border-radius: 7px;
-    border: none;
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: all 0.2s;
-  }
-  .mode-tab.active {
-    background: var(--accent);
-    color: #fff;
-  }
+  header { background: rgba(13,13,21,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 14px 22px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; position: sticky; top: 0; z-index: 100; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-logo { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--duo-green)); display: flex; align-items: center; justify-content: center; font-size: 1.15rem; box-shadow: 0 2px 8px rgba(139,92,246,0.35); }
+  .brand-text h1 { font-size: 1rem; font-weight: 700; background: linear-gradient(90deg, #fff, #c3b8ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .brand-text p { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
 
-  /* MAIN */
-  main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+  .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .streak-chip { display: flex; align-items: center; gap: 5px; background: var(--duo-gold-soft); border: 1px solid rgba(255,200,0,0.3); border-radius: 20px; padding: 5px 11px; font-size: 0.78rem; font-weight: 700; color: var(--duo-gold); cursor: default; }
+  .streak-chip .flame { font-size: 0.95rem; filter: drop-shadow(0 0 4px rgba(255,200,0,0.5)); }
+  .streak-chip.zero { background: var(--surface2); border-color: var(--border); color: var(--muted); }
+  .streak-chip.zero .flame { filter: grayscale(1); opacity: 0.6; }
 
-  /* SECTION HEADERS */
-  .section-title {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-    margin-bottom: 14px;
-  }
+  .mode-tabs { display: flex; background: var(--surface); border-radius: 12px; padding: 4px; gap: 3px; border: 1px solid var(--border); }
+  .mode-tab { padding: 7px 13px; border-radius: 9px; border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 0.81rem; font-weight: 600; transition: all 0.18s ease; }
+  .mode-tab:hover { color: var(--text); }
+  .mode-tab.active { background: var(--accent); color: #fff; box-shadow: 0 2px 8px rgba(139,92,246,0.4); }
+
+  main { max-width: 920px; margin: 0 auto; padding: 28px 18px 80px; animation: slideUp 0.4s ease; }
+  .section-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px; }
+  .hidden { display: none !important; }
+
+  /* TOAST */
+  #toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--border-hi); color: var(--text); padding: 12px 22px; border-radius: 12px; font-size: 0.88rem; font-weight: 600; z-index: 999; opacity: 0; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  #toast.win { border-color: var(--duo-green); background: linear-gradient(135deg, var(--surface2), rgba(88,204,2,0.15)); }
 
   /* TOPIC FILTER */
-  .topic-filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 24px;
-  }
-  .topic-btn {
-    padding: 6px 14px;
-    border-radius: 20px;
-    border: 1.5px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-  .topic-btn.active { color: #fff; border-color: transparent; }
+  .topic-filter { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 22px; }
+  .topic-btn { padding: 7px 14px; border-radius: 22px; border: 1.5px solid var(--border); background: var(--surface); color: var(--muted); font-size: 0.77rem; font-weight: 600; cursor: pointer; transition: all 0.18s ease; white-space: nowrap; }
+  .topic-btn:hover { border-color: var(--border-hi); color: var(--text); }
+  .topic-btn.active { color: #fff; border-color: transparent; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
   .topic-btn[data-topic="alle"].active { background: var(--accent); }
-  .topic-btn[data-topic="prinsipper"].active { background: #7c5cbf; }
-  .topic-btn[data-topic="belastning"].active { background: #e05252; }
-  .topic-btn[data-topic="testing"].active { background: #e09340; }
-  .topic-btn[data-topic="mental"].active { background: #3b9e78; }
-  .topic-btn[data-topic="periodisering"].active { background: #3b7de8; }
-  .topic-btn[data-topic="energi"].active { background: #c44fb5; }
+  .topic-btn[data-topic="svake"].active { background: var(--red); }
+  .topic-btn[data-topic="prinsipper"].active { background: #9f7aea; }
+  .topic-btn[data-topic="belastning"].active { background: #f56565; }
+  .topic-btn[data-topic="testing"].active { background: var(--orange); }
+  .topic-btn[data-topic="mental"].active { background: var(--duo-green); }
+  .topic-btn[data-topic="periodisering"].active { background: var(--blue); }
+  .topic-btn[data-topic="energi"].active { background: #ec4899; }
 
-  /* PROGRESS BAR */
-  .progress-bar-wrap {
-    background: var(--surface2);
-    border-radius: 6px;
-    height: 6px;
-    margin-bottom: 20px;
-    overflow: hidden;
-  }
-  .progress-bar {
-    height: 100%;
-    border-radius: 6px;
-    background: var(--accent);
-    transition: width 0.4s ease;
-  }
-  .progress-label {
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin-bottom: 6px;
-    display: flex;
-    justify-content: space-between;
-  }
+  /* PROGRESS */
+  .progress-label { font-size: 0.76rem; color: var(--muted); margin-bottom: 8px; display: flex; justify-content: space-between; font-weight: 600; }
+  .progress-label .progress-pct { color: var(--duo-green); }
+  .progress-bar-wrap { background: var(--surface2); border-radius: 8px; height: 8px; margin-bottom: 22px; overflow: hidden; position: relative; }
+  .progress-bar { height: 100%; border-radius: 8px; background: linear-gradient(90deg, var(--duo-green), var(--duo-green-hi)); transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 0 10px rgba(88,204,2,0.4); position: relative; overflow: hidden; }
+  .progress-bar::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); background-size: 200% 100%; animation: shimmer 2s linear infinite; }
 
   /* FLASHCARD */
-  .flashcard-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .card-counter {
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin-bottom: 12px;
-  }
-  .flashcard {
-    width: 100%;
-    max-width: 600px;
-    min-height: 260px;
-    perspective: 1000px;
-    cursor: pointer;
-    margin-bottom: 20px;
-  }
-  .flashcard-inner {
-    position: relative;
-    width: 100%;
-    min-height: 260px;
-    transition: transform 0.5s ease;
-    transform-style: preserve-3d;
-  }
+  .flashcard-area { display: flex; flex-direction: column; align-items: center; }
+  .flashcard { width: 100%; max-width: 640px; min-height: 260px; perspective: 1400px; cursor: pointer; margin-bottom: 18px; }
+  .flashcard-inner { position: relative; width: 100%; min-height: 260px; transition: transform 0.55s cubic-bezier(0.4, 0.1, 0.2, 1); transform-style: preserve-3d; }
   .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
-  .card-face {
-    position: absolute;
-    width: 100%;
-    min-height: 260px;
-    border-radius: var(--radius);
-    padding: 28px 32px;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .card-front {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-  }
-  .card-back {
-    background: var(--surface2);
-    border: 1.5px solid var(--accent);
-    transform: rotateY(180deg);
-  }
-  .card-topic-badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 16px;
-    opacity: 0.7;
-  }
-  .card-question {
-    font-size: 1.15rem;
-    font-weight: 600;
-    line-height: 1.5;
-    color: var(--text);
-  }
-  .card-hint {
-    margin-top: 20px;
-    font-size: 0.78rem;
-    color: var(--muted);
-    text-align: center;
-  }
-  .card-answer {
-    font-size: 1rem;
-    line-height: 1.65;
-    color: var(--text);
-  }
-  .card-source {
-    margin-top: 16px;
-    font-size: 0.75rem;
-    color: var(--muted);
-    font-style: italic;
-    border-top: 1px solid var(--border);
-    padding-top: 12px;
-  }
+  .card-face { position: absolute; width: 100%; min-height: 260px; border-radius: var(--radius-lg); padding: 30px 32px; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; box-shadow: var(--shadow-card); }
+  .card-front { background: linear-gradient(145deg, var(--surface), var(--surface2)); border: 1px solid var(--border-hi); }
+  .card-back { background: linear-gradient(145deg, var(--surface2), var(--surface3)); border: 1px solid var(--accent); transform: rotateY(180deg); }
+  .card-front::before, .card-back::before { content: ''; position: absolute; inset: 0; border-radius: var(--radius-lg); background: radial-gradient(circle at top left, var(--accent-soft), transparent 55%); pointer-events: none; }
+  .card-topic-badge { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; opacity: 0.9; position: relative; }
+  .card-question { font-size: 1.15rem; font-weight: 600; line-height: 1.55; position: relative; }
+  .card-hint { margin-top: 22px; font-size: 0.72rem; color: var(--muted2); text-align: center; position: relative; }
+  .card-answer { font-size: 0.96rem; line-height: 1.75; white-space: pre-line; position: relative; }
+  .card-source { margin-top: 16px; font-size: 0.72rem; color: var(--muted); font-style: italic; border-top: 1px solid var(--border); padding-top: 12px; position: relative; }
+
+  /* RATING BUTTONS — Duolingo-style med 3D-bunnskygge */
+  .rating-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 14px; width: 100%; max-width: 640px; }
+  .rating-btn { flex: 1; max-width: 180px; padding: 11px 14px; border-radius: 14px; border: 2px solid var(--border); background: var(--surface); color: var(--muted); font-size: 0.83rem; font-weight: 700; cursor: pointer; transition: all 0.15s ease; text-transform: uppercase; letter-spacing: 0.03em; box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
+  .rating-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 0 rgba(0,0,0,0.25); }
+  .rating-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(0,0,0,0.15); }
+  .rating-btn.kan { border-color: var(--duo-green); color: var(--duo-green); }
+  .rating-btn.kan:hover { background: var(--duo-green-soft); }
+  .rating-btn.usikker { border-color: var(--yellow); color: var(--yellow); }
+  .rating-btn.usikker:hover { background: var(--duo-gold-soft); }
+  .rating-btn.kanIkke { border-color: var(--red); color: var(--red); }
+  .rating-btn.kanIkke:hover { background: rgba(255,75,75,0.12); }
+  .rating-btn.kan.selected { background: var(--duo-green); color: #fff; border-color: var(--duo-green-hi); box-shadow: 0 3px 0 #3d8c02; }
+  .rating-btn.usikker.selected { background: var(--yellow); color: #1a1a1a; border-color: #ffd633; box-shadow: 0 3px 0 #b38a00; }
+  .rating-btn.kanIkke.selected { background: var(--red); color: #fff; border-color: #ff6b6b; box-shadow: 0 3px 0 #b83535; }
 
   /* CARD NAV */
-  .card-nav {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .nav-btn {
-    padding: 10px 22px;
-    border-radius: 10px;
-    border: 1.5px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .nav-btn.primary {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-  }
-  .shuffle-btn {
-    padding: 10px 22px;
-    border-radius: 10px;
-    border: 1.5px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .shuffle-btn:hover { color: var(--text); border-color: var(--muted); }
+  .card-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+  .nav-btn { padding: 10px 22px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--text); font-size: 0.87rem; font-weight: 700; cursor: pointer; transition: all 0.15s; box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
+  .nav-btn:hover { transform: translateY(-1px); border-color: var(--border-hi); box-shadow: 0 4px 0 rgba(0,0,0,0.25); }
+  .nav-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(0,0,0,0.15); }
+  .nav-btn.primary { background: var(--accent); border-color: var(--accent-hi); color: #fff; box-shadow: 0 3px 0 #6d28d9; }
+  .nav-btn.primary:hover { background: var(--accent-hi); }
+  .shuffle-btn { padding: 10px 18px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--muted); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
+  .shuffle-btn:hover { color: var(--text); border-color: var(--border-hi); transform: translateY(-1px); box-shadow: 0 4px 0 rgba(0,0,0,0.25); }
+  .shuffle-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(0,0,0,0.15); }
+  .shuffle-btn.on { color: var(--accent-hi); background: var(--accent-soft); border-color: var(--accent); box-shadow: 0 3px 0 #6d28d9; }
+  .shuffle-btn .shuffle-status { font-size: 0.72rem; opacity: 0.75; font-weight: 500; }
+  .shuffle-btn.on .shuffle-status { color: var(--duo-green-hi); opacity: 1; }
 
   /* TOPIC COLORS */
-  .topic-prinsipper .card-topic-badge { color: #a78bfa; }
-  .topic-belastning .card-topic-badge { color: #fc8181; }
-  .topic-testing .card-topic-badge { color: #f6ad55; }
-  .topic-mental .card-topic-badge { color: #68d391; }
-  .topic-periodisering .card-topic-badge { color: #63b3ed; }
-  .topic-energi .card-topic-badge { color: #e879f9; }
-
+  .topic-prinsipper .card-topic-badge { color: #c4b5fd; }
+  .topic-belastning .card-topic-badge { color: #fca5a5; }
+  .topic-testing .card-topic-badge { color: #fbbf77; }
+  .topic-mental .card-topic-badge { color: var(--duo-green-hi); }
+  .topic-periodisering .card-topic-badge { color: #7dd3fc; }
+  .topic-energi .card-topic-badge { color: #f0abfc; }
   .topic-prinsipper.card-back { border-color: #a78bfa; }
-  .topic-belastning.card-back { border-color: #fc8181; }
-  .topic-testing.card-back { border-color: #f6ad55; }
-  .topic-mental.card-back { border-color: #68d391; }
-  .topic-periodisering.card-back { border-color: #63b3ed; }
-  .topic-energi.card-back { border-color: #e879f9; }
+  .topic-belastning.card-back { border-color: #fca5a5; }
+  .topic-testing.card-back { border-color: #fbbf77; }
+  .topic-mental.card-back { border-color: var(--duo-green); }
+  .topic-periodisering.card-back { border-color: #7dd3fc; }
+  .topic-energi.card-back { border-color: #f0abfc; }
 
   /* EXAM MODE */
-  .exam-list { display: flex; flex-direction: column; gap: 20px; }
-  .exam-task {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .exam-task-header {
-    padding: 18px 22px;
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-  }
-  .task-badge {
-    background: var(--accent);
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 6px;
-    white-space: nowrap;
-    margin-top: 2px;
-  }
-  .task-badge.op2 { background: #7c5cbf; }
-  .exam-question { font-size: 1rem; line-height: 1.6; color: var(--text); }
-  .exam-tips {
-    padding: 0 22px 14px 22px;
-    font-size: 0.78rem;
-    color: var(--muted);
-  }
-  .exam-tips span { color: var(--yellow); }
-  .answer-area {
-    margin: 0 22px 16px;
-    background: var(--bg);
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
-  }
-  .answer-area textarea {
-    width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--text);
-    font-size: 0.92rem;
-    line-height: 1.7;
-    resize: vertical;
-    min-height: 120px;
-    font-family: inherit;
-  }
-  .answer-area textarea::placeholder { color: var(--muted); }
-  .reveal-btn {
-    margin: 0 22px 20px;
-    padding: 10px 20px;
-    border-radius: 10px;
-    border: 1.5px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: block;
-  }
-  .reveal-btn:hover { border-color: var(--accent2); color: var(--accent2); }
-  .model-answer {
-    display: none;
-    margin: 0 22px 22px;
-    background: var(--surface2);
-    border: 1.5px solid var(--accent2);
-    border-radius: 10px;
-    padding: 18px 20px;
-  }
+  .exam-list { display: flex; flex-direction: column; gap: 22px; }
+  .exam-task { background: linear-gradient(145deg, var(--surface), var(--surface2)); border: 1px solid var(--border-hi); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card); }
+  .exam-task-header { padding: 20px 24px 14px; display: flex; align-items: flex-start; gap: 14px; }
+  .task-badge { background: linear-gradient(135deg, var(--accent), var(--accent-hi)); color: #fff; font-size: 0.72rem; font-weight: 800; padding: 5px 11px; border-radius: 8px; white-space: nowrap; margin-top: 2px; letter-spacing: 0.04em; }
+  .task-badge.op2 { background: linear-gradient(135deg, #ec4899, #f472b6); }
+  .exam-question { font-size: 1rem; line-height: 1.65; font-weight: 500; }
+  .exam-tips { padding: 0 24px 14px; font-size: 0.78rem; color: var(--muted); line-height: 1.55; }
+  .exam-tips span { color: var(--duo-gold); font-weight: 700; }
+  .answer-area { margin: 0 24px 14px; background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; transition: border-color 0.2s; }
+  .answer-area:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .answer-area textarea { width: 100%; background: transparent; border: none; outline: none; color: var(--text); font-size: 0.92rem; line-height: 1.7; resize: vertical; min-height: 120px; font-family: inherit; }
+  .answer-area textarea::placeholder { color: var(--muted2); }
+
+  .exam-actions { display: flex; gap: 10px; margin: 0 24px 20px; flex-wrap: wrap; }
+  .reveal-btn { padding: 10px 18px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--muted); font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.15s; box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
+  .reveal-btn:hover { border-color: var(--duo-green); color: var(--duo-green); transform: translateY(-1px); }
+  .reveal-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(0,0,0,0.15); }
+  .claude-btn { padding: 10px 18px; border-radius: 12px; border: 2px solid var(--accent); background: var(--accent-soft); color: var(--accent-hi); font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; box-shadow: 0 3px 0 #6d28d9; }
+  .claude-btn:hover { background: var(--accent); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 0 #6d28d9; }
+  .claude-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 #6d28d9; }
+
+  .model-answer { display: none; margin: 0 24px 24px; background: linear-gradient(135deg, var(--surface3), var(--surface2)); border: 1.5px solid var(--duo-green); border-radius: var(--radius-sm); padding: 20px 22px; animation: slideUp 0.3s ease; }
   .model-answer.visible { display: block; }
-  .model-answer h4 {
-    font-size: 0.78rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--accent2);
-    margin-bottom: 12px;
-  }
-  .model-answer-text {
-    font-size: 0.92rem;
-    line-height: 1.75;
-    color: var(--text);
-    white-space: pre-line;
-  }
-  .model-answer-source {
-    margin-top: 14px;
-    font-size: 0.75rem;
-    color: var(--muted);
-    font-style: italic;
-    border-top: 1px solid var(--border);
-    padding-top: 10px;
-  }
+  .model-answer h4 { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--duo-green); margin-bottom: 14px; }
+  .model-answer-text { font-size: 0.92rem; line-height: 1.75; white-space: pre-line; }
+  .model-answer-source { margin-top: 14px; font-size: 0.73rem; color: var(--muted); font-style: italic; border-top: 1px solid var(--border); padding-top: 10px; }
 
-  /* EMPTY STATE */
-  .empty { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 0.95rem; }
+  /* DASHBOARD */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-bottom: 28px; }
+  .stat-card { background: linear-gradient(145deg, var(--surface), var(--surface2)); border: 1px solid var(--border-hi); border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow-card); }
+  .stat-card h3 { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 16px; }
+  .stat-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .stat-label { font-size: 0.84rem; color: var(--text); flex: 1; font-weight: 600; }
+  .stat-counts { font-size: 0.78rem; color: var(--muted); white-space: nowrap; font-weight: 600; }
+  .mini-bar-wrap { flex: 2; background: var(--surface3); border-radius: 4px; height: 7px; overflow: hidden; }
+  .mini-bar { height: 100%; border-radius: 4px; background: var(--duo-green); transition: width 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-  /* RESPONSIVE */
+  /* PROGRESS RING */
+  .ring-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .ring-svg { width: 150px; height: 150px; transform: rotate(-90deg); }
+  .ring-bg { stroke: var(--surface3); }
+  .ring-fg { stroke: url(#ringGrad); stroke-linecap: round; transition: stroke-dashoffset 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); filter: drop-shadow(0 0 6px rgba(88,204,2,0.4)); }
+  .ring-center { position: absolute; text-align: center; }
+  .ring-pct { font-size: 2.2rem; font-weight: 800; background: linear-gradient(135deg, var(--duo-green), var(--duo-green-hi)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+  .ring-sub { font-size: 0.72rem; color: var(--muted); margin-top: 2px; font-weight: 600; }
+
+  .big-stat { text-align: center; padding: 4px 8px; }
+  .big-number { font-size: 2.2rem; font-weight: 800; line-height: 1; }
+  .big-number.kan { color: var(--duo-green); }
+  .big-number.usikker { color: var(--yellow); }
+  .big-number.kanIkke { color: var(--red); }
+  .big-number.urated { color: var(--muted); }
+  .big-label { font-size: 0.72rem; color: var(--muted); margin-top: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .reset-btn { padding: 9px 18px; border-radius: 10px; border: 2px solid var(--border); background: var(--surface); color: var(--muted); font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.15s; box-shadow: 0 3px 0 rgba(0,0,0,0.15); }
+  .reset-btn:hover { border-color: var(--red); color: var(--red); transform: translateY(-1px); }
+  .backup-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 12px; flex-wrap: wrap; }
+
   @media (max-width: 520px) {
     header { flex-direction: column; align-items: flex-start; }
-    .card-face { padding: 22px 20px; }
+    .card-face { padding: 20px 18px; }
     .card-question { font-size: 1rem; }
+    .exam-actions { flex-direction: column; }
   }
 
-  /* HIDDEN */
-  .hidden { display: none !important; }
+  /* SPORT LOCK MODAL */
+  .sport-modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .sport-modal { background: var(--surface); border: 1.5px solid var(--accent); border-radius: var(--radius); padding: 28px; max-width: 500px; width: 100%; }
+  .sport-modal h2 { font-size: 1.15rem; color: var(--accent); margin-bottom: 8px; }
+  .sport-modal p { color: var(--muted); font-size: 0.86rem; margin-bottom: 20px; line-height: 1.55; }
+  .sport-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .sport-btn { padding: 14px 10px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .sport-btn:hover, .sport-btn.active { border-color: var(--accent); color: var(--accent); background: var(--bg); }
+  .sport-custom { display: flex; gap: 8px; }
+  .sport-custom input { flex: 1; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 10px 14px; color: var(--text); font-size: 0.88rem; outline: none; }
+  .sport-custom input:focus { border-color: var(--accent); }
+  .sport-custom button { padding: 10px 18px; background: var(--accent); border: none; border-radius: 10px; color: #fff; font-weight: 600; cursor: pointer; }
+  .sport-badge-hdr { padding: 5px 11px; background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; font-size: 0.75rem; color: var(--accent2); cursor: pointer; white-space: nowrap; }
+  .sport-badge-hdr:hover { border-color: var(--accent2); }
+
+  /* ACTIVE RECALL */
+  .recall-area { width: 100%; max-width: 600px; margin-bottom: 14px; }
+  .recall-area textarea { width: 100%; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; padding: 12px 14px; color: var(--text); font-family: inherit; font-size: 0.9rem; line-height: 1.55; resize: vertical; min-height: 70px; outline: none; }
+  .recall-area textarea:focus { border-color: var(--accent); }
+  .recall-check { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+  .recall-btn { padding: 8px 16px; border-radius: 8px; border: 1.5px solid var(--accent2); background: transparent; color: var(--accent2); font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+  .recall-btn:hover { background: rgba(79,209,197,0.1); }
+  .recall-score { font-size: 0.85rem; font-weight: 600; }
+  .recall-score.good { color: var(--green); }
+  .recall-score.mid { color: var(--yellow); }
+  .recall-score.low { color: var(--red); }
+  .recall-keywords { font-size: 0.78rem; color: var(--muted); margin-top: 8px; line-height: 1.7; }
+  .kw-hit { background: rgba(72,187,120,0.2); color: var(--green); padding: 2px 7px; border-radius: 4px; margin: 0 3px; font-weight: 600; }
+  .kw-miss { background: rgba(252,129,129,0.15); color: var(--red); padding: 2px 7px; border-radius: 4px; margin: 0 3px; font-weight: 600; text-decoration: line-through; opacity: 0.8; }
+
+  /* DRØFTING MODE */
+  .drofting-intro { background: var(--surface); border: 1.5px solid var(--accent2); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 20px; }
+  .drofting-intro h3 { color: var(--accent2); font-size: 0.95rem; margin-bottom: 8px; }
+  .drofting-intro p { color: var(--muted); font-size: 0.82rem; line-height: 1.6; }
+  .drofting-list { display: flex; flex-direction: column; gap: 16px; }
+  .drofting-task { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 18px 22px; }
+  .drofting-type { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent2); margin-bottom: 8px; }
+  .drofting-type.for { color: var(--green); }
+  .drofting-type.mot { color: var(--red); }
+  .drofting-type.koble { color: #b48eff; }
+  .drofting-q { font-size: 0.95rem; line-height: 1.6; margin-bottom: 12px; }
+  .drofting-scaffold { background: var(--surface2); border-radius: 8px; padding: 10px 14px; font-size: 0.78rem; color: var(--muted); margin-bottom: 12px; line-height: 1.7; }
+  .drofting-scaffold b { color: var(--accent2); }
+  .drofting-task textarea { width: 100%; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text); font-size: 0.88rem; line-height: 1.65; resize: vertical; min-height: 90px; outline: none; font-family: inherit; }
+  .drofting-task textarea:focus { border-color: var(--accent); }
+  .drofting-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .drofting-hint { display: none; background: var(--surface2); border-left: 3px solid var(--yellow); padding: 10px 14px; margin-top: 10px; font-size: 0.82rem; line-height: 1.7; border-radius: 0 8px 8px 0; }
+  .drofting-hint.visible { display: block; }
 </style>
 </head>
 <body>
 
 <header>
-  <div>
-    <h1>Treningslære 2 – Tentamensforberedelse</h1>
-    <p>VG3 3IDA · Lørenskog VGS · Vår 2026</p>
+  <div class="brand">
+    <div class="brand-logo">💪</div>
+    <div class="brand-text">
+      <h1>Treningslære 2</h1>
+      <p>VG3 · 3IDA · Lørenskog VGS</p>
+    </div>
   </div>
-  <div class="mode-tabs">
-    <button class="mode-tab active" onclick="setMode('flashcard')">Flashkort</button>
-    <button class="mode-tab" onclick="setMode('exam')">Øvingstentamen</button>
+  <div class="header-right">
+    <div class="streak-chip zero" id="streak-chip" title="Daglig streak – øv hver dag!">
+      <span class="flame">🔥</span>
+      <span id="streak-num">0</span>
+    </div>
+    <div class="sport-badge-hdr" id="sport-badge" onclick="openSportModal()">🏃 <span id="sport-name">Velg idrett</span></div>
+    <div class="mode-tabs">
+      <button class="mode-tab active" onclick="setMode('flashcard', this)">Flashkort</button>
+      <button class="mode-tab" onclick="setMode('drofting', this)">Drøfting</button>
+      <button class="mode-tab" onclick="setMode('exam', this)">Tentamen</button>
+      <button class="mode-tab" onclick="setMode('stats', this)">Statistikk</button>
+    </div>
   </div>
 </header>
+
+<!-- SPORT LOCK MODAL -->
+<div id="sport-modal-bg" class="sport-modal-bg hidden">
+  <div class="sport-modal">
+    <h2>Velg idrett</h2>
+    <p>Alle eksempler, drøftinger og oppgaver tilpasses idretten du velger. Gjør det mer konkret og bygger «muskelminne» for tentamen. Du kan bytte senere.</p>
+    <div class="sport-grid" id="sport-grid"></div>
+    <div class="sport-custom">
+      <input type="text" id="sport-custom-input" placeholder="Eller skriv inn selv (f.eks. taekwondo)" />
+      <button onclick="saveCustomSport()">Velg</button>
+    </div>
+  </div>
+</div>
 
 <main>
 
@@ -394,6 +315,7 @@
     <p class="section-title">Velg tema</p>
     <div class="topic-filter">
       <button class="topic-btn active" data-topic="alle" onclick="filterTopic('alle', this)">Alle (50)</button>
+      <button class="topic-btn" data-topic="svake" onclick="filterTopic('svake', this)">⚠️ Svake kort</button>
       <button class="topic-btn" data-topic="prinsipper" onclick="filterTopic('prinsipper', this)">Treningsprinsipper</button>
       <button class="topic-btn" data-topic="belastning" onclick="filterTopic('belastning', this)">Belastning & overtrening</button>
       <button class="topic-btn" data-topic="testing" onclick="filterTopic('testing', this)">Testing & spenst</button>
@@ -404,19 +326,28 @@
 
     <div class="progress-label">
       <span id="progress-text">Kort 1 av 50</span>
-      <span id="progress-pct">0%</span>
+      <span class="progress-pct" id="progress-pct">2%</span>
     </div>
     <div class="progress-bar-wrap">
       <div class="progress-bar" id="progress-bar" style="width:2%"></div>
     </div>
 
     <div class="flashcard-area">
+      <div class="recall-area">
+        <textarea id="recall-input" placeholder="Skriv svaret ditt her FØR du snur kortet (aktiv recall → mye sterkere læring)..." rows="3"></textarea>
+        <div class="recall-check">
+          <button class="recall-btn" onclick="checkRecall()">🎯 Sjekk svar</button>
+          <span class="recall-score" id="recall-score"></span>
+        </div>
+        <div class="recall-keywords" id="recall-keywords"></div>
+      </div>
+
       <div class="flashcard" id="flashcard" onclick="flipCard()">
-        <div class="flashcard-inner" id="flashcard-inner">
+        <div class="flashcard-inner">
           <div class="card-face card-front" id="card-front">
             <div class="card-topic-badge" id="card-badge"></div>
             <div class="card-question" id="card-question"></div>
-            <div class="card-hint">Klikk for å se svaret</div>
+            <div class="card-hint">Klikk for å se svaret &nbsp;·&nbsp; ← → for å navigere &nbsp;·&nbsp; Mellomrom for å snu</div>
           </div>
           <div class="card-face card-back" id="card-back">
             <div class="card-topic-badge" id="card-badge-back"></div>
@@ -426,271 +357,411 @@
         </div>
       </div>
 
+      <div class="rating-row" id="rating-row">
+        <button class="rating-btn kan" onclick="rateCard('kan')">✅ Kan dette</button>
+        <button class="rating-btn usikker" onclick="rateCard('usikker')">🤔 Usikker</button>
+        <button class="rating-btn kanIkke" onclick="rateCard('kanIkke')">❌ Kan ikke</button>
+      </div>
+
       <div class="card-nav">
         <button class="nav-btn" onclick="prevCard()">← Forrige</button>
         <button class="nav-btn primary" onclick="nextCard()">Neste →</button>
-        <button class="shuffle-btn" onclick="shuffleCards()">🔀 Bland</button>
+        <button class="shuffle-btn" id="shuffle-btn" onclick="toggleShuffle()">🔀 Bland <span class="shuffle-status" id="shuffle-status">av</span></button>
       </div>
     </div>
   </div>
 
+  <!-- DRØFTING MODE -->
+  <div id="drofting-mode" class="hidden">
+    <div class="drofting-intro">
+      <h3>💭 Drøftingstrening – forberedelse til Oppgave 2</h3>
+      <p>Oppgave 2 er ~50% av tentamenkarakteren. «Vurder» og «drøft» krever at du ser saken fra flere sider, bruker fagterminologi og lander på en konklusjon. Her øver du på for/mot-argumenter og koble-oppgaver med din valgte idrett.</p>
+    </div>
+    <div class="drofting-list" id="drofting-list"></div>
+  </div>
+
   <!-- EXAM MODE -->
   <div id="exam-mode" class="hidden">
-    <p class="section-title">Øv på tentamensoppgaver – skriv svar og se modellsvar</p>
+    <p class="section-title">Skriv svar → Vis modellsvar eller send til Claude for tilbakemelding</p>
     <div class="exam-list" id="exam-list"></div>
+  </div>
+
+  <!-- STATS MODE -->
+  <div id="stats-mode" class="hidden">
+    <p class="section-title">Din fremgang</p>
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="stat-card" id="sync-card" style="margin-bottom:18px;">
+      <h3>☁️ Sky-sync (telefon ↔ PC)</h3>
+      <div id="sync-status" style="font-size:0.85rem; color:var(--muted); margin-bottom:14px; line-height:1.55;"></div>
+      <div id="sync-form"></div>
+    </div>
+    <div class="backup-row">
+      <button class="reset-btn" onclick="exportState()">💾 Eksporter fremgang</button>
+      <button class="reset-btn" onclick="importState()">📥 Importer fremgang</button>
+      <button class="reset-btn" onclick="resetAll()">🗑️ Nullstill</button>
+    </div>
   </div>
 
 </main>
 
-<script>
-// ─── DATA ────────────────────────────────────────────────────────────────────
+<div id="toast"></div>
 
-const TOPICS = {
-  prinsipper: 'Treningsprinsipper',
-  belastning: 'Belastning & overtrening',
-  testing: 'Testing & spenst',
-  mental: 'Mental trening',
-  periodisering: 'Periodisering',
-  energi: 'Energiomsetning'
+<script>
+const TOPICS = { prinsipper:'Treningsprinsipper', belastning:'Belastning & overtrening', testing:'Testing & spenst', mental:'Mental trening', periodisering:'Periodisering', energi:'Energiomsetning' };
+const TOPIC_COLORS = { prinsipper:'#a78bfa', belastning:'#fc8181', testing:'#f6ad55', mental:'#68d391', periodisering:'#63b3ed', energi:'#e879f9' };
+
+const SPORTS = ['Fotball','Håndball','Basketball','Volleyball','Langrenn','Løping','Svømming','Sykling','Styrkeløft'];
+
+// sport-specific hints used in drøftinger
+const SPORT_CONTEXT = {
+  'Fotball': { energi: 'intervall-lignende, mye aerob + gjentatte sprint', prinsipp: 'variasjon og spesifisitet', spenst: 'horisontal (sprint) + vertikal (hodedueller)' },
+  'Håndball': { energi: 'anaerob glykolyse dominerer i angrep', prinsipp: 'spesifisitet og individuell stimulering', spenst: 'vertikal (skudd, blokkering)' },
+  'Basketball': { energi: 'ATP-CP + anaerob glykolyse', prinsipp: 'spesifisitet og variasjon', spenst: 'vertikal (skudd, retur, blokkering)' },
+  'Volleyball': { energi: 'ATP-CP dominerer i hvert spill', prinsipp: 'spesifisitet og individuell stimulering', spenst: 'vertikal (smasj, blokk)' },
+  'Langrenn': { energi: 'aerob, stor VO₂maks-betydning', prinsipp: 'kontinuitet og spesifisitet', spenst: 'mindre avgjørende enn utholdenhet' },
+  'Løping': { energi: 'aerob + anaerob terskel avgjørende', prinsipp: 'kontinuitet, progresjon og spesifisitet', spenst: 'horisontal kraft ved sprint' },
+  'Svømming': { energi: 'aerob (lang) / anaerob (sprint)', prinsipp: 'spesifisitet og teknikk', spenst: 'lite relevant, kraft i vannet viktigere' },
+  'Sykling': { energi: 'aerob, lang varighet', prinsipp: 'kontinuitet og periodisering', spenst: 'kun eksplosive spurter' },
+  'Styrkeløft': { energi: 'ATP-CP (enkeltløft)', prinsipp: 'progresjon og spesifisitet', spenst: 'eksplosiv kraft' }
 };
 
-const CARDS = [
-  // TRENINGSPRINSIPPER
-  { topic: 'prinsipper', q: 'Hva er prinsippet om belastning og tilpasning?', a: 'Trening må gi kroppen en belastning sterkere enn den er vant til (overload) for at kroppen skal tilpasse seg og forbedre seg. Uten tilstrekkelig stimuli skjer ingen fremgang.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 42' },
-  { topic: 'prinsipper', q: 'Hva er restitusjonsprinsippet?', a: 'Mellom treningsøktene må det gis tilstrekkelig hvile slik at kroppen kan bygge seg opp igjen og nå et høyere prestasjonsnivå enn før. Uten restitusjon ingen fremgang.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 44' },
-  { topic: 'prinsipper', q: 'Hva er superkompensasjon (overkompensasjon)?', a: 'Etter riktig belastning og tilstrekkelig restitusjon stiger prestasjonsnivået over utgangspunktet. Kroppen overkompenserer for å være bedre rustet neste gang den utsettes for samme belastning.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 44' },
-  { topic: 'prinsipper', q: 'Hva er periodiseringsprinsippet?', a: 'Treningen organiseres i perioder med varierende belastning – forberedelsesperiode, konkurranseperiode og aktiv avkoblingsperiode – for å nå toppform til riktig tidspunkt.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 46' },
-  { topic: 'prinsipper', q: 'Hva er variasjonsprinsippet?', a: 'Treningen bør varieres for å unngå ensidighet, overbelastning og psykisk stagnasjon. Variasjon stimulerer ulike egenskaper og opprettholder motivasjonen.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 47' },
-  { topic: 'prinsipper', q: 'Hva er progresjonsprinsippet?', a: 'Treningsbelastningen må økes gradvis over tid ettersom kroppen tilpasser seg. Stagnerer belastningen, stagnerer fremgangen. Progresjonen kan skje gjennom økt volum, intensitet eller frekvens.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 47' },
-  { topic: 'prinsipper', q: 'Hva er prinsippet om individuell og helhetlig stimulering?', a: 'Treningen må tilpasses den enkeltutøveren og ta hensyn til alle aspekter: fysisk, psykisk, teknisk og taktisk. Det som fungerer for én utøver trenger ikke fungere for en annen.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 48' },
-  { topic: 'prinsipper', q: 'Hva er spesifisitetsprinsippet?', a: 'Treningseffekten er spesifikk for den typen trening som gjennomføres – type øvelse, muskelgruppe, energisystem og bevegelsesmønster. Man må trene det man vil bli bedre på.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 48' },
-  { topic: 'prinsipper', q: 'Hva er prinsippet om styring og kontroll?', a: 'Treningen bør planlegges, registreres (treningsdagbok) og evalueres kontinuerlig for å sikre at man er på rett vei mot målene og kan justere ved behov.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 49' },
-  { topic: 'prinsipper', q: 'Hva er kontinuitetsprinsippet?', a: 'Treningen må være regelmessig og kontinuerlig. Lange pauser fører til tap av tilpasninger (detraining/detrenering). Det tar kortere tid å gjenvinne formen enn å bygge den opp.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 49' },
-
-  // BELASTNING & OVERTRENING
-  { topic: 'belastning', q: 'Hva består treningsbelastning av?', a: 'Treningsbelastning = volum × intensitet × frekvens.\n• Volum: total mengde trening (km, kg, antall repetisjoner)\n• Intensitet: hardhet (% av maks puls, % av 1RM)\n• Frekvens: antall treningsøkter per uke', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 40' },
-  { topic: 'belastning', q: 'Hva er DOMS?', a: 'Delayed Onset Muscle Soreness – forsinket muskelsårhet som oppstår 24–48 timer etter uvant eller hard trening. Skyldes mikroskader i muskelvevet. Er en normal reaksjon og forsvinner etter noen dager.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 45' },
-  { topic: 'belastning', q: 'Hva er overreaching?', a: 'Kortvarig tilstand der kroppen ikke klarer å restituere seg mellom øktene. Kjennetegn: tretthet, lett prestasjonsnedgang. Kan rettes opp med noen ekstra hviledager. Ikke det samme som overtrening.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 50' },
-  { topic: 'belastning', q: 'Hva er overtrening?', a: 'Langvarig tilstand der kroppen ikke klarer å restituere seg, til tross for hvile. Kjennetegn: vedvarende prestasjonsnedgang, utmattelse, humørsvingninger, søvnproblemer, økt sykdomsrisiko. Kan ta måneder å komme seg av.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 50–51' },
-  { topic: 'belastning', q: 'Hva er sammenhengen mellom belastning, restitusjon og superkompensasjon?', a: 'Riktig belastning + tilstrekkelig restitusjon = superkompensasjon og fremgang.\nFor mye belastning uten nok hvile = kumulativ tretthet → overtrening → tilbakegang.\nFor lite belastning = ingen tilpasning.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 44' },
-  { topic: 'belastning', q: 'Hva er aktiv restitusjon?', a: 'Lett aktivitet som rolig jogging, svømming eller tøying etter hardt arbeid. Fremmer blodsirkulasjon og fjerning av avfallsstoffer (laktat) uten å belaste kroppen ytterligere. Gir raskere restitusjon enn passiv hvile.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 45' },
-  { topic: 'belastning', q: 'Nevn fem tegn på overtrening.', a: '1. Vedvarende tretthet til tross for hvile\n2. Prestasjonsnedgang over tid\n3. Humørsvingninger og irritabilitet\n4. Søvnproblemer\n5. Økt hvilepuls og økt sykdomsrisiko', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 51' },
-  { topic: 'belastning', q: 'Hva skjer om man trener igjen for tidlig (før restitusjon er fullført)?', a: 'Neste treningsøkt starter på et lavere nivå enn etter fullstendig restitusjon. Over tid bygger kumulativ tretthet seg opp, prestasjonsnivået synker gradvis, og overtrening kan oppstå.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 44' },
-
-  // TESTING & SPENST
-  { topic: 'testing', q: 'Hva er reliabilitet (i testing)?', a: 'Pålitelighet: testen gir samme resultat ved gjentatte målinger under like forhold. En reliabel test er konsistent og reproduserbar. Eksempel: samme sprinter løper 100m tre ganger og får nesten identiske tider.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 98' },
-  { topic: 'testing', q: 'Hva er validitet (i testing)?', a: 'Gyldighet: testen måler faktisk det den er ment å måle. En valid spenst-test måler spenst – ikke kraft, koordinasjon eller noe annet. En test kan være reliabel uten å være valid.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 98' },
-  { topic: 'testing', q: 'Hva er et testbatteri?', a: 'En samling av ulike tester som til sammen gir et helhetlig bilde av utøverens kapasitet. Inkluderer gjerne tester for utholdenhet, styrke, spenst, hurtighet og bevegelighet.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 100' },
-  { topic: 'testing', q: 'Hva er CMJ (Counter Movement Jump)?', a: 'Vertikal spenst-test. Starter oppreist, senker seg ned i en rask nedsenk og hopper rett opp. Utnytter strekk-forkortningssyklusen (elastisk energi i sener og muskler). Relevant for håndball, volleyball og basketball.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 103; Olympiatoppen' },
-  { topic: 'testing', q: 'Hva er SJ (Squat Jump)?', a: 'Vertikal spenst-test. Starter i statisk knebøy (~90°), holder stillingen noen sekunder og hopper opp uten forutgående nedsenk. Isolerer den konsentriske (positive) kraften uten bidrag fra elastisk energi.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 103' },
-  { topic: 'testing', q: 'Hva er Five Jump Test?', a: 'Horisontal spenst-test. Fem hopp fremover uten stopp. Måler eksplosiv horisontal kraft og koordinasjon. Relevant for fotball, løp og håndball. Enkel å gjennomføre uten utstyr.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 104' },
-  { topic: 'testing', q: 'Hva er forskjellen på vertikal og horisontal spenst?', a: 'Vertikal spenst = hopp rett opp. Relevant i basketball, volleyball, håndball (blokkering, skudd).\nHorisontal spenst = hopp framover. Relevant i sprint, fotball, friidrett (lengdehopp).\nNoen idretter krever begge typer.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 102' },
-  { topic: 'testing', q: 'Nevn to idretter som krever spenst og forklar hvorfor.', a: 'Basketball: krever vertikal spenst for å nå kurven ved skudd og retur.\nFotball: krever horisontal spenst for eksplosive akselerasjoner og vertikal spenst for hodedueller.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 102' },
-  { topic: 'testing', q: 'Hvorfor kan CMJ være en god test i volleyball, men ikke i svømming?', a: 'I volleyball er vertikal spenst direkte relevant (hopp ved blokk og smasj). CMJ tester nettopp denne egenskapen – valid test.\nI svømming er horisontal spenst og teknikk i vannet avgjørende, ikke vertikal spenst. CMJ mangler validitet for svømmere.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 98–103' },
-  { topic: 'testing', q: 'Hva er arbeidskravsanalyse?', a: 'En systematisk analyse av hva idretten krever av utøveren: hvilke fysiske egenskaper (utholdenhet, styrke, spenst, hurtighet), psykiske krav, tekniske krav og taktiske krav. Grunnlag for riktig treningsplanlegging.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 20' },
-
-  // MENTAL TRENING
-  { topic: 'mental', q: 'Hva er Banduras fire kilder til selvtillit?', a: '1. Mestringsopplevelse: egne erfaringer med å lykkes (sterkeste kilde)\n2. Vikarierende erfaring: se andre med likt utgangspunkt lykkes\n3. Verbal overtalelse: oppmuntring fra trener/lagkamerater\n4. Fysiologisk og emosjonell tilstand: tolke nervøsitet som positiv energi', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 45' },
-  { topic: 'mental', q: 'Hvilken av Banduras fire kilder er sterkest og hvorfor?', a: 'Mestringsopplevelse er den sterkeste kilden. Å faktisk mestre noe selv gir den mest varige og stabile selvtilliten. Det er vanskeligere å argumentere bort egne erfaringer enn andres meninger.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 45' },
-  { topic: 'mental', q: 'Hva er Olympiatoppens modell for mental trening?', a: 'Tre nivåer:\n1. Mentale basisteknikker: målsetting, avspenning, visualisering, indre dialog\n2. Mentale ferdigheter: selvtillit, motivasjon, konsentrasjon, spenningsregulering, mestring av stress\n3. Mental robusthet: evnen til å prestere under press', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal; Olympiatoppen' },
-  { topic: 'mental', q: 'Hva er visualisering (bildedanning)?', a: 'Mental forestilling av bevegelser, situasjoner eller mål. Hjernen aktiverer mange av de samme nervebaner som ved faktisk utførelse. PETTLEP-prinsippene beskriver effektiv visualisering (Physical, Environment, Task, Timing, Learning, Emotion, Perspective).', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 78' },
-  { topic: 'mental', q: 'Hva er indre dialog?', a: 'De tankene vi snakker til oss selv med. Kan være positiv (affirmasjoner: "jeg kan dette", "fokus nå") eller negativ (tankesopp). Bevisst positiv indre dialog styrker selvtillit og opprettholder fokus under press.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 65' },
-  { topic: 'mental', q: 'Hva er spenningsregulering?', a: 'Evnen til å regulere aktiveringsnivået til et optimalt nivå. For høy spenning gir angst og stivhet. For lav spenning gir manglende fokus og dårlig prestasjon. Teknikker: kontrollert pust, progressiv avspenning, aktiveringsrutiner.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 55' },
-  { topic: 'mental', q: 'Hva er SMARTERE-mål?', a: 'S – Spesifikke\nM – Målbare\nA – Aksepterte (av utøveren)\nR – Realistiske\nT – Tidsbegrensede\nE – Evaluerte\nR – Reviderte\n\nRammeverk for effektiv målsetting i idrett.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 32' },
-  { topic: 'mental', q: 'Hva er forskjellen på resultat-, prestasjons- og prosessmål?', a: 'Resultatmål: fokus på utfall (vinne gull). Vanskelig å kontrollere.\nPrestasjonsmål: fokus på egne prestasjoner (løpe under 12 sek på 100m). Delvis kontrollerbart.\nProsessmål: fokus på hva man gjør (riktig teknikk ved hvert skudd). Fullt kontrollerbart.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 30–31' },
-  { topic: 'mental', q: 'Hva er konsentrasjon i idretts­sammenheng?', a: 'Evnen til å rette og holde oppmerksomheten mot relevante stimuli. Dimensjoner:\n• Bred/smal fokus\n• Intern/ekstern fokus\nGode utøvere kan skifte mellom disse etter behov.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 70' },
-  { topic: 'mental', q: 'Hva er en konkurranseplan?', a: 'En strukturert mental plan for hva utøveren skal tenke og gjøre:\n• Før-konkurranseplanen: oppvarming, mentale rutiner\n• Konkurranseplanen: fokuspunkter underveis\n• Refokuseringsplanen: hva gjøres om noe går galt', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 85' },
-  { topic: 'mental', q: 'Nevn to øvelser som kan bygge opp selvtillit i en idrett (Banduras modell).', a: 'Eksempel: fotball\n1. Mestringsoppgaver i trening: øvelser der spilleren nesten alltid lykkes (lette pasninger, kjente situasjoner) → mestringsopplevelse.\n2. Mentoring/modellæring: se og analysere videoklipp av vellykkede prestasjoner fra seg selv eller andre → vikarierende erfaring.', src: 'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 45–48' },
-
-  // PERIODISERING
-  { topic: 'periodisering', q: 'Hva er en forberedelsesperiode?', a: 'Første periode i treningsåret. Kjennetegn: høyt volum, lav/moderat intensitet. Mål: bygge opp grunnleggende kondisjon, styrke og teknikk. Teknikkarbeid viktig, lite konkurranse-spesifikk trening.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 58' },
-  { topic: 'periodisering', q: 'Hva er en konkurranseperiode?', a: 'Perioden der utøveren konkurrerer. Kjennetegn: lavere volum, høy intensitet, spesifikt treningsinnhold. Mål: opprettholde og toppe formen. Treningsinnholdet ligner konkurransen så mye som mulig.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 59' },
-  { topic: 'periodisering', q: 'Hva er aktiv avkoblingsperiode?', a: 'Perioden etter konkurranse-sesongen. Kjennetegn: lav belastning, stor variasjon, fokus på restitusjon. Mål: la kropp og sinn restituere seg. Bør ikke være total inaktivitet – aktiv hvile er bedre.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 60' },
-  { topic: 'periodisering', q: 'Hva skjer med volum og intensitet gjennom en sesong?', a: 'Forberedelse → Konkurranse:\n• Volum: synker gradvis\n• Intensitet: øker gradvis\nVolum og intensitet er omvendt proporsjonale. Dette fordi kroppen ikke klarer å håndtere maksimalt av begge samtidig over tid.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 58–59' },
-  { topic: 'periodisering', q: 'Hva er kapasitetsanalyse?', a: 'Analyse av utøverens nåværende kapasitet sammenlignet med arbeidskravene i idretten. Identifiserer styrker og svakheter. Grunnlag for å prioritere hva som skal trenes mest.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 25' },
-  { topic: 'periodisering', q: 'Nevn de fem plantypene i treningsplanlegging.', a: '1. Langtidsplan (4–8 år): karriereutvikling\n2. Årsplan: hele treningsåret\n3. Periodeplan: en treningsperiode (8–16 uker)\n4. Ukeplan: én uke\n5. Øktplan: én treningsøkt', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 55' },
-  { topic: 'periodisering', q: 'Hva er en treningsdagbok og hvorfor er den nyttig?', a: 'En systematisk registrering av gjennomført trening (innhold, belastning, restitusjon, subjektiv følelse). Nyttig fordi den: gir grunnlag for evaluering, hjelper å unngå overtrening, og gjør det mulig å identifisere hva som fungerer.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 65' },
-  { topic: 'periodisering', q: 'Hva er tapering?', a: 'Gradvis reduksjon av treningsvolum (15–60%) i ukene før en viktig konkurranse, mens intensiteten opprettholdes. Gir kroppen tid til å restituere seg fullt ut og nå toppen av superkompensasjon på konkurransedagen.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 60' },
-
-  // ENERGIOMSETNING
-  { topic: 'energi', q: 'Hva er aerob energifrigjøring?', a: 'Energifrigjøring med tilstede-værende oksygen. Bruker fett og karbohydrat som drivstoff. Gir mye energi, men saktere enn anaerobt. Dominerer ved aktiviteter over ca. 2 minutter. Ingen melkesyreopphopning.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 12–14' },
-  { topic: 'energi', q: 'Hva er anaerob energifrigjøring?', a: 'Energifrigjøring uten oksygen. Gir energi raskt, men i begrensede mengder. To systemer:\n1. ATP-CP (fosfatsystem): 0–10 sek\n2. Anaerob glykolyse (laktatsystem): 10 sek–2 min\nGir melkesyreoppbygning ved høy intensitet.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 11–13' },
-  { topic: 'energi', q: 'Hva er ATP-CP-systemet (fosfatsystemet)?', a: 'Kroppens raskeste energisystem. Bruker fosfatkreatin lagret direkte i muskelcellene. Varighet: 0–10 sekunder. Ingen melkesyre. Viktig i sprint, hopp og eksplosive kast. Restitueres raskt (1–5 min).', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 11' },
-  { topic: 'energi', q: 'Hva er VO₂maks?', a: 'Maksimalt oksygenopptak – den øverste grensen for aerob kapasitet. Måles i ml O₂ per kg kroppsvekt per minutt. Viktig mål for utholdenhet. Høy VO₂maks er nødvendig i langdistanseløp, langrenn og sykling.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 18' },
-  { topic: 'energi', q: 'Hva er melkesyreterske (anaerob terskel)?', a: 'Det intensitetsnivået der laktatproduksjonen overstiger kroppens evne til å fjerne det. Over terskelen stiger laktatnivået raskt, og utmattelse inntreffer. Trening nær og over terskelen er svært effektivt for å heve den.', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 16' },
-  { topic: 'energi', q: 'Hva bestemmer hvilket energisystem som dominerer?', a: 'Primært intensitet og varighet:\n• Svært høy intensitet, kort varighet (0–10 sek) → ATP-CP\n• Høy intensitet, moderat varighet (10 sek–2 min) → Anaerob glykolyse\n• Moderat intensitet, lang varighet (>2 min) → Aerob metabolisme', src: 'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 10–14' }
+const DROFTINGER = [
+  { type:'for', category:'Treningsprinsipper', prompt:'Argumenter FOR at spesifisitetsprinsippet er det VIKTIGSTE treningsprinsippet i {SPORT}.', scaffold:'<b>Definer</b> spesifisitet (Gjerset s. 48). <b>Koble</b> til {SPORT}s krav. <b>Gi 2 konkrete eksempler</b> fra {SPORT}. <b>Mot-argument du svarer på</b>: hva med kontinuitet/progresjon?', hint:'Typiske poeng FOR: (1) uten spesifisitet trenes feil egenskap – du blir sterkere i bænk men ikke i {SPORT}. (2) Overføringsverdi fra generell trening er lav i spesialiserte idretter. (3) Arbeidskravsanalyse dikterer hva som skal trenes. Kilde: Gjerset m.fl. (2012), s. 48.' },
+  { type:'mot', category:'Treningsprinsipper', prompt:'Argumenter MOT at spesifisitetsprinsippet er det viktigste i {SPORT}. Hvilket prinsipp er viktigere – og hvorfor?', scaffold:'<b>Velg</b> et annet prinsipp (restitusjon? kontinuitet? progresjon?). <b>Definer</b> det. <b>Vis</b> hvorfor det er mer avgjørende i {SPORT} enn spesifisitet. <b>Innrøm</b> at spesifisitet også er viktig, men underordnet.', hint:'Typiske poeng MOT: (1) Uten kontinuitet mister man tilpasninger raskt (detrenering) – da hjelper ikke spesifisitet. (2) Uten restitusjon → overtrening → regresjon. (3) Prinsippene henger sammen – ett alene er uten verdi. Kilde: Gjerset m.fl. (2012), s. 42–51.' },
+  { type:'koble', category:'Periodisering', prompt:'Koble periodiseringsprinsippet konkret til {SPORT}: beskriv forberedelsesperiode, konkurranseperiode og aktiv avkoblingsperiode med volum, intensitet og typisk innhold.', scaffold:'<b>Struktur</b>: én avsnitt per periode. <b>Nevn</b> volum og intensitet for hver. <b>Gi konkrete eksempler</b> på treningsinnhold i {SPORT}. <b>Begrunn</b> hvorfor innholdet endres.', hint:'Generell mal: Forberedelse = høyt volum, lav intensitet, generell trening. Konkurranse = lavt volum, høy intensitet, spesifikt. Avkobling = lav belastning, variasjon, restitusjon. Tilpass konkret til {SPORT}. Kilde: Gjerset m.fl. (2012), s. 57–61.' },
+  { type:'for', category:'Mental trening', prompt:'Argumenter FOR at mestringsopplevelse er den viktigste kilden til selvtillit for en utøver i {SPORT}.', scaffold:'<b>Forklar</b> Banduras fire kilder. <b>Fokusér på</b> hvorfor mestring skaper stabil selvtillit (konkrete bevis). <b>Gi 2 øvelseseksempler</b> fra {SPORT} som gir mestring.', hint:'Typiske poeng: (1) Egne erfaringer er vanskelig å argumentere bort. (2) Graderte oppgaver gir konsistent mestringsfølelse. (3) Mestring styrker også motivasjon og indre dialog. Kilde: Pensgaard & Hollingen (2006), s. 45.' },
+  { type:'mot', category:'Mental trening', prompt:'Drøft påstanden: "Det er viktigere å trene mentalt enn fysisk i toppidretten." Ta utgangspunkt i {SPORT}.', scaffold:'<b>Presenter</b> BEGGE sider (for: på toppnivå er fysisk nivå likt, mentalt skiller). <b>Mot</b>: uten fysisk grunnlag hjelper ikke mentalt arbeid. <b>Konkluder</b> nyansert.', hint:'Mulig konklusjon: Det er ikke et enten-eller. På lavere nivå dominerer fysiske forskjeller; på toppnivå blir mental trening utslagsgivende. Begge deler må vektlegges. Kilde: Pensgaard & Hollingen (2006).' },
+  { type:'koble', category:'Belastning & overtrening', prompt:'Forklar sammenhengen mellom treningsbelastning, restitusjon og overtrening – med konkrete eksempler fra {SPORT}.', scaffold:'<b>Definer</b> alle tre begrepene. <b>Bruk</b> superkompensasjon som rød tråd. <b>Konkret eksempel</b>: hva skjer hvis en {SPORT}-utøver trener for hardt i forberedelsesperioden?', hint:'Sekvens: belastning → mikrotraume → restitusjon → superkompensasjon → høyere nivå. For lite hvile = overreaching → overtrening. Tegn: vedvarende tretthet, prestasjonsnedgang, humørsvingninger. Kilde: Gjerset m.fl. (2012), s. 40–51.' },
+  { type:'koble', category:'Testing', prompt:'Velg 2 tester som er relevante for {SPORT}. Forklar hvorfor hver test har validitet for {SPORT}, og nevn én test som IKKE ville vært valid.', scaffold:'<b>Arbeidskravsanalyse</b> først: hva krever {SPORT}? <b>2 valide tester</b> – begrunn med reliabilitet/validitet. <b>1 ikke-valid test</b> – begrunn hvorfor den mangler gyldighet.', hint:'Eksempel-logikk: For spenstkrevende idretter = CMJ/SJ. For utholdenhetsidretter = VO₂maks-test. Ikke-valid = test som måler noe irrelevant for prestasjonen. Kilde: Gjerset m.fl. (2012), s. 98–104.' },
+  { type:'for', category:'Oppgave 2-trening', prompt:'Hovedpåstand (tentamenoppgave): "I {SPORT} er det ingen treningsprinsipp som er viktigere enn de andre." Argumenter FOR påstanden.', scaffold:'<b>Poeng 1</b>: prinsippene er gjensidig avhengige. <b>Poeng 2</b>: brytes ett, svekkes de andre. <b>Poeng 3</b>: eksempel fra {SPORT} der alle må jobbe sammen.', hint:'Styrken i FOR-argumentet: systemtankegang. Ingen enkelt-prinsipp kan alene gi fremgang. Mangel på f.eks. restitusjon gjør progresjon umulig. Koble til: alle 10 prinsipper henger sammen som en kjede.' },
+  { type:'mot', category:'Oppgave 2-trening', prompt:'Samme påstand: "I {SPORT} er det ingen treningsprinsipp som er viktigere enn de andre." Argumenter MOT.', scaffold:'<b>Velg 2-3 prinsipper</b> som er spesielt viktige i {SPORT}. <b>Begrunn</b> med idrettens egenart (fysiologi, tidsbruk, teknikk). <b>Konkluder</b>: noen prinsipper vektlegges mer i praksis.', hint:'Strategi: bruk arbeidskravsanalyse av {SPORT}. Hvilke fysiske/mentale egenskaper er kritiske? Knytt 2-3 prinsipper til disse. Innrøm at alle prinsipper betyr noe, men vektingen er ulik. Dette er den «nyanserte» sterke besvarelsen.' }
 ];
 
-// ─── EXAM QUESTIONS ──────────────────────────────────────────────────────────
+// ─── SPORT LOCK ──────────────────────────────────────────────────────────────
+
+function getSport() {
+  return STATE.sport || '';
+}
+function setSport(s) {
+  STATE.sport = s;
+  saveState();
+  updateSportBadge();
+  renderDrofting();
+  closeSportModal();
+}
+function updateSportBadge() {
+  const s = getSport();
+  document.getElementById('sport-name').textContent = s || 'Velg idrett';
+}
+function openSportModal() {
+  const grid = document.getElementById('sport-grid');
+  const current = getSport();
+  grid.innerHTML = '';
+  SPORTS.forEach(sp => {
+    const b = document.createElement('button');
+    b.className = 'sport-btn' + (sp === current ? ' active' : '');
+    b.textContent = sp;
+    b.onclick = () => setSport(sp);
+    grid.appendChild(b);
+  });
+  document.getElementById('sport-modal-bg').classList.remove('hidden');
+  document.getElementById('sport-custom-input').value = '';
+}
+function closeSportModal() {
+  document.getElementById('sport-modal-bg').classList.add('hidden');
+}
+function saveCustomSport() {
+  const v = document.getElementById('sport-custom-input').value.trim();
+  if (v) setSport(v);
+}
+function subSport(text) {
+  const s = getSport() || 'din valgte idrett';
+  return text.replace(/\{SPORT\}/g, s);
+}
+
+// ─── AKTIV RECALL ────────────────────────────────────────────────────────────
+
+const STOPWORDS = new Set(['og','i','på','som','er','et','en','å','for','den','det','av','at','til','med','har','kan','fra','så','men','de','om','ikke','når','hvor','hva','hvorfor','hvordan','vi','du','jeg','ha','være','blir','også','bare','seg','sin','sitt','sine','eller','nå','over','under','mellom','mer','mye','noen','noe','alle','alt','slik','mens','dette','disse','denne','vil','skal','må','bør','ved','per','opp','ned','ut','inn','etter','før','hver','både','eks','bl','samt','jf','kg','ml','min','sek','s','pga','dvs','f','eks','ca','etc','osv','vs','eg','pga','selv','uten','sammen','siden','enn','annen','annet','andre','tre','fire','fem','første','andre','tredje']);
+
+function extractKeywords(text) {
+  const clean = text
+    .toLowerCase()
+    .replace(/[()•\-–.,:;!?\n\[\]"/\\]/g, ' ')
+    .replace(/\d+/g, ' ');
+  const words = clean.split(/\s+/).filter(w => w.length >= 4 && !STOPWORDS.has(w));
+  const freq = {};
+  words.forEach(w => { freq[w] = (freq[w] || 0) + 1; });
+  const unique = [...new Set(words)];
+  unique.sort((a, b) => (freq[b] - freq[a]) || (b.length - a.length));
+  return unique.slice(0, 8);
+}
+
+function checkRecall() {
+  const card = filteredCards[currentIndex];
+  if (!card) return;
+  const answer = document.getElementById('recall-input').value.trim();
+  const scoreEl = document.getElementById('recall-score');
+  const kwEl = document.getElementById('recall-keywords');
+  if (!answer) {
+    scoreEl.textContent = 'Skriv noe først';
+    scoreEl.className = 'recall-score low';
+    kwEl.innerHTML = '';
+    return;
+  }
+  const keywords = extractKeywords(card.a);
+  const answerLower = answer.toLowerCase();
+  const hits = [];
+  const misses = [];
+  keywords.forEach(k => {
+    const stem = k.length > 5 ? k.slice(0, Math.max(4, k.length - 2)) : k;
+    if (answerLower.includes(stem)) hits.push(k);
+    else misses.push(k);
+  });
+  const pct = Math.round((hits.length / keywords.length) * 100);
+  let cls = 'low', msg = '';
+  if (pct >= 70) { cls = 'good'; msg = `✅ Sterkt! ${hits.length}/${keywords.length} nøkkelord (${pct}%) – snu kortet og sjekk`; }
+  else if (pct >= 40) { cls = 'mid'; msg = `🤔 ${hits.length}/${keywords.length} nøkkelord (${pct}%) – les modellsvaret nøye`; }
+  else { cls = 'low'; msg = `❌ ${hits.length}/${keywords.length} nøkkelord (${pct}%) – øv mer på dette kortet`; }
+  scoreEl.className = 'recall-score ' + cls;
+  scoreEl.textContent = msg;
+  kwEl.innerHTML = hits.map(k => `<span class="kw-hit">${k}</span>`).join('') + misses.map(k => `<span class="kw-miss">${k}</span>`).join('');
+  setTimeout(() => {
+    if (!isFlipped) flipCard();
+  }, 400);
+}
+
+function resetRecall() {
+  document.getElementById('recall-input').value = '';
+  document.getElementById('recall-score').textContent = '';
+  document.getElementById('recall-keywords').innerHTML = '';
+}
+
+// ─── DRØFTING ────────────────────────────────────────────────────────────────
+
+function renderDrofting() {
+  const container = document.getElementById('drofting-list');
+  if (!container) return;
+  container.innerHTML = '';
+  const sport = getSport();
+  if (!sport) {
+    container.innerHTML = `<div class="drofting-task" style="text-align:center"><p style="color:var(--muted)">Du må velge idrett først for å bruke drøftings-modus.</p><br><button class="nav-btn primary" onclick="openSportModal()">🏃 Velg idrett</button></div>`;
+    return;
+  }
+  DROFTINGER.forEach((d, i) => {
+    const typeLabel = { for:'FOR-argument', mot:'MOT-argument', koble:'Koble teori → praksis' }[d.type];
+    const div = document.createElement('div');
+    div.className = 'drofting-task';
+    div.innerHTML = `
+      <div class="drofting-type ${d.type}">${typeLabel} · ${d.category}</div>
+      <div class="drofting-q">${subSport(d.prompt)}</div>
+      <div class="drofting-scaffold">📋 Struktur: ${subSport(d.scaffold)}</div>
+      <textarea id="drof-${i}" placeholder="Skriv drøftingen din her..." rows="5" oninput="saveDroftingAnswer(${i}, this.value)"></textarea>
+      <div class="drofting-actions">
+        <button class="reveal-btn" onclick="toggleHint(${i}, this)">💡 Vis argumentasjons-hint</button>
+        <button class="claude-btn" onclick="sendDroftingToClaude(${i})">✦ Få tilbakemelding fra Claude</button>
+      </div>
+      <div class="drofting-hint" id="hint-${i}">${subSport(d.hint)}</div>
+    `;
+    container.appendChild(div);
+    const saved = (STATE.droftingAnswers && STATE.droftingAnswers[i]) || '';
+    document.getElementById('drof-' + i).value = saved;
+  });
+}
+
+function saveDroftingAnswer(i, val) {
+  STATE.droftingAnswers = STATE.droftingAnswers || {};
+  STATE.droftingAnswers[i] = val;
+  saveState();
+}
+
+function toggleHint(i, btn) {
+  const el = document.getElementById('hint-' + i);
+  const visible = el.classList.toggle('visible');
+  btn.textContent = visible ? '💡 Skjul hint' : '💡 Vis argumentasjons-hint';
+}
+
+function sendDroftingToClaude(i) {
+  const d = DROFTINGER[i];
+  const answer = document.getElementById('drof-' + i).value.trim();
+  if (!answer) { showToast('Skriv drøftingen din først'); return; }
+  const sport = getSport() || 'valgt idrett';
+  const prompt = `Du er en Treningslære 2-lærer på norsk VG3 (LK20). Gi konkret tilbakemelding på denne DRØFTINGEN fra en elev som forbereder seg til tentamen (fredag).
+
+IDRETT VALGT: ${sport}
+TYPE: ${d.type === 'for' ? 'Argumentere FOR en påstand' : d.type === 'mot' ? 'Argumentere MOT / nyansert drøfting' : 'Koble teori til praksis'}
+
+OPPGAVE:
+${subSport(d.prompt)}
+
+ELEVENS SVAR:
+${answer}
+
+Gi tilbakemelding på:
+1. Er argumentene tydelige og godt begrunnet?
+2. Fagterminologi fra Treningslære 2 – brukes den korrekt?
+3. Er det konkret nok knyttet til ${sport}?
+4. Struktur og rød tråd
+5. Hva mangler? Motargumenter, eksempler, kilder?
+6. Tentativ karakter (1–6) med kort begrunnelse
+
+Svar kort og støttende.`;
+  navigator.clipboard.writeText(prompt).then(() => {
+    window.open('https://claude.ai', '_blank');
+    showToast('✦ Prompt kopiert! Lim inn i Claude (Ctrl+V)');
+  });
+}
+
+const CARDS = [
+  { topic:'prinsipper', q:'Hva er prinsippet om belastning og tilpasning?', a:'Trening må gi kroppen en belastning sterkere enn den er vant til (overload) for at kroppen skal tilpasse seg og forbedre seg. Uten tilstrekkelig stimuli skjer ingen fremgang.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 42' },
+  { topic:'prinsipper', q:'Hva er restitusjonsprinsippet?', a:'Mellom treningsøktene må det gis tilstrekkelig hvile slik at kroppen kan bygge seg opp igjen og nå et høyere prestasjonsnivå enn før. Uten restitusjon ingen fremgang.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 44' },
+  { topic:'prinsipper', q:'Hva er superkompensasjon (overkompensasjon)?', a:'Etter riktig belastning og tilstrekkelig restitusjon stiger prestasjonsnivået over utgangspunktet. Kroppen overkompenserer for å være bedre rustet neste gang den utsettes for samme belastning.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 44' },
+  { topic:'prinsipper', q:'Hva er periodiseringsprinsippet?', a:'Treningen organiseres i perioder med varierende belastning – forberedelsesperiode, konkurranseperiode og aktiv avkoblingsperiode – for å nå toppform til riktig tidspunkt.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 46' },
+  { topic:'prinsipper', q:'Hva er variasjonsprinsippet?', a:'Treningen bør varieres for å unngå ensidighet, overbelastning og psykisk stagnasjon. Variasjon stimulerer ulike egenskaper og opprettholder motivasjonen.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 47' },
+  { topic:'prinsipper', q:'Hva er progresjonsprinsippet?', a:'Treningsbelastningen må økes gradvis over tid ettersom kroppen tilpasser seg. Stagnerer belastningen, stagnerer fremgangen. Progresjonen kan skje gjennom økt volum, intensitet eller frekvens.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 47' },
+  { topic:'prinsipper', q:'Hva er prinsippet om individuell og helhetlig stimulering?', a:'Treningen må tilpasses den enkeltutøveren og ta hensyn til alle aspekter: fysisk, psykisk, teknisk og taktisk. Det som fungerer for én utøver trenger ikke fungere for en annen.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 48' },
+  { topic:'prinsipper', q:'Hva er spesifisitetsprinsippet?', a:'Treningseffekten er spesifikk for den typen trening som gjennomføres – type øvelse, muskelgruppe, energisystem og bevegelsesmønster. Man må trene det man vil bli bedre på.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 48' },
+  { topic:'prinsipper', q:'Hva er prinsippet om styring og kontroll?', a:'Treningen bør planlegges, registreres (treningsdagbok) og evalueres kontinuerlig for å sikre at man er på rett vei mot målene og kan justere ved behov.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 49' },
+  { topic:'prinsipper', q:'Hva er kontinuitetsprinsippet?', a:'Treningen må være regelmessig og kontinuerlig. Lange pauser fører til tap av tilpasninger (detraining/detrenering). Det tar kortere tid å gjenvinne formen enn å bygge den opp.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 49' },
+  { topic:'belastning', q:'Hva består treningsbelastning av?', a:'Treningsbelastning = volum × intensitet × frekvens.\n• Volum: total mengde trening (km, kg, antall repetisjoner)\n• Intensitet: hardhet (% av maks puls, % av 1RM)\n• Frekvens: antall treningsøkter per uke', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 40' },
+  { topic:'belastning', q:'Hva er DOMS?', a:'Delayed Onset Muscle Soreness – forsinket muskelsårhet som oppstår 24–48 timer etter uvant eller hard trening. Skyldes mikroskader i muskelvevet. Er en normal reaksjon og forsvinner etter noen dager.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 45' },
+  { topic:'belastning', q:'Hva er overreaching?', a:'Kortvarig tilstand der kroppen ikke klarer å restituere seg mellom øktene. Kjennetegn: tretthet, lett prestasjonsnedgang. Kan rettes opp med noen ekstra hviledager. Ikke det samme som overtrening.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 50' },
+  { topic:'belastning', q:'Hva er overtrening?', a:'Langvarig tilstand der kroppen ikke klarer å restituere seg, til tross for hvile. Kjennetegn: vedvarende prestasjonsnedgang, utmattelse, humørsvingninger, søvnproblemer, økt sykdomsrisiko. Kan ta måneder å komme seg av.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 50–51' },
+  { topic:'belastning', q:'Hva er sammenhengen mellom belastning, restitusjon og superkompensasjon?', a:'Riktig belastning + tilstrekkelig restitusjon = superkompensasjon og fremgang.\nFor mye belastning uten nok hvile = kumulativ tretthet → overtrening → tilbakegang.\nFor lite belastning = ingen tilpasning.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 44' },
+  { topic:'belastning', q:'Hva er aktiv restitusjon?', a:'Lett aktivitet som rolig jogging, svømming eller tøying etter hardt arbeid. Fremmer blodsirkulasjon og fjerning av avfallsstoffer (laktat) uten å belaste kroppen ytterligere. Gir raskere restitusjon enn passiv hvile.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 45' },
+  { topic:'belastning', q:'Nevn fem tegn på overtrening.', a:'1. Vedvarende tretthet til tross for hvile\n2. Prestasjonsnedgang over tid\n3. Humørsvingninger og irritabilitet\n4. Søvnproblemer\n5. Økt hvilepuls og økt sykdomsrisiko', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 51' },
+  { topic:'belastning', q:'Hva skjer om man trener igjen for tidlig (før restitusjon er fullført)?', a:'Neste treningsøkt starter på et lavere nivå enn etter fullstendig restitusjon. Over tid bygger kumulativ tretthet seg opp, prestasjonsnivået synker gradvis, og overtrening kan oppstå.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 44' },
+  { topic:'testing', q:'Hva er reliabilitet (i testing)?', a:'Pålitelighet: testen gir samme resultat ved gjentatte målinger under like forhold. En reliabel test er konsistent og reproduserbar. Eksempel: samme sprinter løper 100m tre ganger og får nesten identiske tider.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 98' },
+  { topic:'testing', q:'Hva er validitet (i testing)?', a:'Gyldighet: testen måler faktisk det den er ment å måle. En valid spenst-test måler spenst – ikke kraft, koordinasjon eller noe annet. En test kan være reliabel uten å være valid.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 98' },
+  { topic:'testing', q:'Hva er et testbatteri?', a:'En samling av ulike tester som til sammen gir et helhetlig bilde av utøverens kapasitet. Inkluderer gjerne tester for utholdenhet, styrke, spenst, hurtighet og bevegelighet.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 100' },
+  { topic:'testing', q:'Hva er CMJ (Counter Movement Jump)?', a:'Vertikal spenst-test. Starter oppreist, senker seg ned i en rask nedsenk og hopper rett opp. Utnytter strekk-forkortningssyklusen (elastisk energi). Relevant for håndball, volleyball og basketball.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 103' },
+  { topic:'testing', q:'Hva er SJ (Squat Jump)?', a:'Vertikal spenst-test. Starter i statisk knebøy (~90°), holder stillingen noen sekunder og hopper opp uten forutgående nedsenk. Isolerer den konsentriske kraften uten bidrag fra elastisk energi.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 103' },
+  { topic:'testing', q:'Hva er Five Jump Test?', a:'Horisontal spenst-test. Fem hopp fremover uten stopp. Måler eksplosiv horisontal kraft og koordinasjon. Relevant for fotball, løp og håndball. Enkel å gjennomføre uten utstyr.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 104' },
+  { topic:'testing', q:'Hva er forskjellen på vertikal og horisontal spenst?', a:'Vertikal spenst = hopp rett opp. Relevant i basketball, volleyball, håndball (blokkering, skudd).\nHorisontal spenst = hopp framover. Relevant i sprint, fotball, friidrett (lengdehopp).', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 102' },
+  { topic:'testing', q:'Nevn to idretter som krever spenst og forklar hvorfor.', a:'Basketball: krever vertikal spenst for å nå kurven ved skudd og retur.\nFotball: krever horisontal spenst for eksplosive akselerasjoner og vertikal spenst for hodedueller.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 102' },
+  { topic:'testing', q:'Hvorfor kan CMJ være en god test i volleyball, men ikke i svømming?', a:'I volleyball er vertikal spenst direkte relevant (hopp ved blokk og smasj) – CMJ er valid.\nI svømming er horisontal kraft og teknikk i vannet avgjørende, ikke vertikal spenst. CMJ mangler validitet for svømmere.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 98–103' },
+  { topic:'testing', q:'Hva er arbeidskravsanalyse?', a:'En systematisk analyse av hva idretten krever av utøveren: hvilke fysiske egenskaper (utholdenhet, styrke, spenst, hurtighet), psykiske krav, tekniske krav og taktiske krav. Grunnlag for riktig treningsplanlegging.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 20' },
+  { topic:'mental', q:'Hva er Banduras fire kilder til selvtillit?', a:'1. Mestringsopplevelse: egne erfaringer med å lykkes (sterkeste kilde)\n2. Vikarierende erfaring: se andre med likt utgangspunkt lykkes\n3. Verbal overtalelse: oppmuntring fra trener/lagkamerater\n4. Fysiologisk og emosjonell tilstand: tolke nervøsitet som positiv energi', src:'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 45' },
+  { topic:'mental', q:'Hvilken av Banduras fire kilder er sterkest og hvorfor?', a:'Mestringsopplevelse er den sterkeste kilden. Å faktisk mestre noe selv gir den mest varige og stabile selvtilliten. Det er vanskeligere å argumentere bort egne erfaringer enn andres meninger.', src:'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 45' },
+  { topic:'mental', q:'Hva er Olympiatoppens modell for mental trening?', a:'Tre nivåer:\n1. Mentale basisteknikker: målsetting, avspenning, visualisering, indre dialog\n2. Mentale ferdigheter: selvtillit, motivasjon, konsentrasjon, spenningsregulering, mestring av stress\n3. Mental robusthet: evnen til å prestere under press', src:'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal; Olympiatoppen' },
+  { topic:'mental', q:'Hva er visualisering (bildedanning)?', a:'Mental forestilling av bevegelser, situasjoner eller mål. Hjernen aktiverer mange av de samme nervebaner som ved faktisk utførelse. PETTLEP-prinsippene beskriver effektiv visualisering (Physical, Environment, Task, Timing, Learning, Emotion, Perspective).', src:'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 78' },
+  { topic:'mental', q:'Hva er indre dialog?', a:'De tankene vi snakker til oss selv med. Kan være positiv (affirmasjoner: "jeg kan dette", "fokus nå") eller negativ (tankesopp). Bevisst positiv indre dialog styrker selvtillit og opprettholder fokus under press.', src:'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 65' },
+  { topic:'mental', q:'Hva er spenningsregulering?', a:'Evnen til å regulere aktiveringsnivået til et optimalt nivå. For høy spenning gir angst og stivhet. For lav spenning gir manglende fokus og dårlig prestasjon. Teknikker: kontrollert pust, progressiv avspenning, aktiveringsrutiner.', src:'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 55' },
+  { topic:'mental', q:'Hva er SMARTERE-mål?', a:'S – Spesifikke\nM – Målbare\nA – Aksepterte (av utøveren)\nR – Realistiske\nT – Tidsbegrensede\nE – Evaluerte\nR – Reviderte\n\nRammeverk for effektiv målsetting i idrett.', src:'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 32' },
+  { topic:'mental', q:'Hva er forskjellen på resultat-, prestasjons- og prosessmål?', a:'Resultatmål: fokus på utfall (vinne gull) – vanskelig å kontrollere.\nPrestasjonsmål: fokus på egne prestasjoner (løpe under 12 sek) – delvis kontrollerbart.\nProsessmål: fokus på hva man gjør (riktig teknikk) – fullt kontrollerbart.', src:'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 30–31' },
+  { topic:'mental', q:'Hva er konsentrasjon i idretts­sammenheng?', a:'Evnen til å rette og holde oppmerksomheten mot relevante stimuli. Dimensjoner:\n• Bred/smal fokus\n• Intern/ekstern fokus\nGode utøvere kan skifte mellom disse etter behov.', src:'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 70' },
+  { topic:'mental', q:'Hva er en konkurranseplan?', a:'En strukturert mental plan for hva utøveren skal tenke og gjøre:\n• Før-konkurranseplanen: oppvarming, mentale rutiner\n• Konkurranseplanen: fokuspunkter underveis\n• Refokuseringsplanen: hva gjøres om noe går galt', src:'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 85' },
+  { topic:'mental', q:'Nevn to øvelser som kan bygge opp selvtillit (Banduras modell).', a:'1. Mestringsoppgaver: øvelser der utøveren nesten alltid lykkes → gir mestringsopplevelse (sterkeste kilde).\n2. Videoanalyse av egne gode prestasjoner: ser seg selv lykkes → vikarierende erfaring + positiv emosjonell tilstand.', src:'Pensgaard & Hollingen (2006). Idrettens mentale treningslære. Gyldendal, s. 45–48' },
+  { topic:'periodisering', q:'Hva er en forberedelsesperiode?', a:'Første periode i treningsåret. Kjennetegn: høyt volum, lav/moderat intensitet. Mål: bygge opp grunnleggende kondisjon, styrke og teknikk. Teknikkarbeid viktig, lite konkurranse-spesifikk trening.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 58' },
+  { topic:'periodisering', q:'Hva er en konkurranseperiode?', a:'Perioden der utøveren konkurrerer. Kjennetegn: lavere volum, høy intensitet, spesifikt treningsinnhold. Mål: opprettholde og toppe formen. Treningsinnholdet ligner konkurransen så mye som mulig.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 59' },
+  { topic:'periodisering', q:'Hva er aktiv avkoblingsperiode?', a:'Perioden etter konkurranse-sesongen. Kjennetegn: lav belastning, stor variasjon, fokus på restitusjon. Mål: la kropp og sinn restituere seg. Bør ikke være total inaktivitet – aktiv hvile er bedre.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 60' },
+  { topic:'periodisering', q:'Hva skjer med volum og intensitet gjennom en sesong?', a:'Forberedelse → Konkurranse:\n• Volum: synker gradvis\n• Intensitet: øker gradvis\nVolum og intensitet er omvendt proporsjonale – kroppen klarer ikke maksimalt av begge over tid.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 58–59' },
+  { topic:'periodisering', q:'Hva er kapasitetsanalyse?', a:'Analyse av utøverens nåværende kapasitet sammenlignet med arbeidskravene i idretten. Identifiserer styrker og svakheter. Grunnlag for å prioritere hva som skal trenes mest.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 25' },
+  { topic:'periodisering', q:'Nevn de fem plantypene i treningsplanlegging.', a:'1. Langtidsplan (4–8 år): karriereutvikling\n2. Årsplan: hele treningsåret\n3. Periodeplan: en treningsperiode (8–16 uker)\n4. Ukeplan: én uke\n5. Øktplan: én treningsøkt', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 55' },
+  { topic:'periodisering', q:'Hva er en treningsdagbok og hvorfor er den nyttig?', a:'En systematisk registrering av gjennomført trening (innhold, belastning, restitusjon, subjektiv følelse). Nyttig fordi den gir grunnlag for evaluering, hjelper å unngå overtrening, og identifiserer hva som fungerer.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 65' },
+  { topic:'periodisering', q:'Hva er tapering?', a:'Gradvis reduksjon av treningsvolum (15–60%) i ukene før en viktig konkurranse, mens intensiteten opprettholdes. Gir kroppen tid til å restituere seg fullt ut og nå toppen av superkompensasjon på konkurransedagen.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 60' },
+  { topic:'energi', q:'Hva er aerob energifrigjøring?', a:'Energifrigjøring med tilstedeværende oksygen. Bruker fett og karbohydrat som drivstoff. Gir mye energi, men saktere enn anaerobt. Dominerer ved aktiviteter over ca. 2 minutter. Ingen melkesyreopphopning.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 12–14' },
+  { topic:'energi', q:'Hva er anaerob energifrigjøring?', a:'Energifrigjøring uten oksygen. Gir energi raskt, men i begrensede mengder. To systemer:\n1. ATP-CP (fosfatsystem): 0–10 sek\n2. Anaerob glykolyse (laktatsystem): 10 sek–2 min\nGir melkesyreoppbygning ved høy intensitet.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 11–13' },
+  { topic:'energi', q:'Hva er ATP-CP-systemet (fosfatsystemet)?', a:'Kroppens raskeste energisystem. Bruker fosfatkreatin lagret direkte i muskelcellene. Varighet: 0–10 sekunder. Ingen melkesyre. Viktig i sprint, hopp og eksplosive kast. Restitueres raskt (1–5 min).', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 11' },
+  { topic:'energi', q:'Hva er VO₂maks?', a:'Maksimalt oksygenopptak – den øverste grensen for aerob kapasitet. Måles i ml O₂ per kg kroppsvekt per minutt. Viktig mål for utholdenhet. Høy VO₂maks er nødvendig i langdistanseløp, langrenn og sykling.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 18' },
+  { topic:'energi', q:'Hva er anaerob terskel (melkesyreterskel)?', a:'Det intensitetsnivået der laktatproduksjonen overstiger kroppens evne til å fjerne det. Over terskelen stiger laktatnivået raskt og utmattelse inntreffer. Trening nær og over terskelen er svært effektivt for å heve den.', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 16' },
+  { topic:'energi', q:'Hva bestemmer hvilket energisystem som dominerer?', a:'Primært intensitet og varighet:\n• Svært høy intensitet, 0–10 sek → ATP-CP\n• Høy intensitet, 10 sek–2 min → Anaerob glykolyse\n• Moderat intensitet, >2 min → Aerob metabolisme', src:'Gjerset m.fl. (2012). Treningslære 2. Gyldendal, s. 10–14' }
+];
 
 const EXAM_TASKS = [
-  {
-    badge: '1A',
-    question: 'Nevn to idrettsaktiviteter som stiller krav til spenst. Gjør rede for en test du mener er god i den ene idrettsaktiviteten, men ikke den andre. Begrunn svaret.',
-    tips: '«Nevn» = bare oppgi. «Gjør rede for» = nevn + definer + beskriv slik at du viser forståelse. Koble testen til den spesifikke idrettens krav (validitet).',
-    placeholder: 'Skriv svaret ditt her...\n\nTips: Start med å velge to idretter → beskriv spenst-kravene i hver → presenter én test → forklar hvorfor den passer for idrett A men ikke idrett B.',
-    modelAnswer: `INNLEDNING
-Spenst er evnen til å utvikle stor kraft i løpet av kort tid og er en sentral egenskap i mange idretter. I dette svaret tar jeg for meg volleyball og svømming, og vurderer om CMJ er en egnet test for begge.
-
-IDRETTENES KRAV TIL SPENST
-Volleyball krever vertikal spenst. Spillerne hopper gjentatte ganger for å smasje, blokkere og ta imot ballen. Eksplosiv oppover-kraft er direkte avgjørende for prestasjon (Gjerset m.fl., 2012, s. 102).
-
-Svømming krever primært aerob utholdenhet, kraft i vannet og god teknikk. Vertikal spenst er lite relevant for selve svømmeprestasjon, bortsett fra dykket fra startblokken.
-
-TESTEN: CMJ (Counter Movement Jump)
-CMJ er en vertikal spenst-test der utøveren raskt senker seg ned og hopper rett opp. Testen måler eksplosiv vertikal kraft og utnyttelse av strekk-forkortningssyklusen (Gjerset m.fl., 2012, s. 103).
-
-VURDERING AV TESTENS GYLDIGHET
-CMJ er valid for volleyball fordi testen måler nettopp den egenskapen som er avgjørende i idretten – vertikal spenst. Høy score på CMJ vil korrelere med bedre prestasjon i kamp.
-
-CMJ er ikke valid for svømmere fordi testen ikke gjenspeiler de kravene svømmingen stiller. En god score vil ikke nødvendigvis si noe om svømmeprestasjon. Testen mangler dermed validitet i denne sammenhengen (Gjerset m.fl., 2012, s. 98).
-
-KONKLUSJON
-CMJ er en god test for volleyball fordi den er valid – den måler det idretten faktisk krever. For svømmere gir testen lite nyttig informasjon og er derfor ikke hensiktsmessig.`,
-    sources: 'Gjerset, A., Haugen, K. & Holmstad, P. (2012). Treningslære 2. Gyldendal Norsk Forlag, s. 98–103.'
-  },
-  {
-    badge: '1B',
-    question: 'Gjør rede for sammenhengen mellom treningsbelastning, restitusjon og overtrening.',
-    tips: '«Gjør rede for» = nevn + definer + beskriv. Vis at du forstår sammenhengen – bruk superkompensasjonskurven som rød tråd. Nevn overreaching som et steg på veien.',
-    placeholder: 'Skriv svaret ditt her...\n\nTips: Definer begrepene → beskriv superkompensasjon → forklar hva som skjer ved for mye belastning/for lite restitusjon → definer overreaching vs. overtrening.',
-    modelAnswer: `INNLEDNING
-For å utvikle seg som utøver må man finne balansen mellom nok treningsbelastning og tilstrekkelig restitusjon. Velter denne balansen, risikerer man overtrening.
-
-TRENINGSBELASTNING
-Treningsbelastning er summen av volum (mengde), intensitet (hardhet) og frekvens (antall økter) i treningen (Gjerset m.fl., 2012, s. 40). En belastning over det kroppen er vant til er nødvendig for å utløse tilpasning – dette kalles prinsippet om overload.
-
-RESTITUSJON OG SUPERKOMPENSASJON
-Etter trening er kroppen svekket av belastningen. I restitusjonsfasen repareres skader, energilagre fylles opp, og kroppen bygger seg opp sterkere enn før – et fenomen kalt superkompensasjon (Gjerset m.fl., 2012, s. 44). Det er under restitusjon, ikke under selve treningen, at fremgangen skjer.
-
-KONSEKVENSER AV UBALANSE
-Dersom neste treningsøkt startes for tidlig – før kroppen er ferdig restituert – begynner man på et lavere nivå. Gjentas dette over tid, vil man oppleve:
-
-1. Overreaching: kortvarig overbelastning. Kjennetegn: tretthet og lett prestasjonsnedgang. Lar seg rette opp med noen ekstra hviledager (Gjerset m.fl., 2012, s. 50).
-
-2. Overtrening: langvarig tilstand der kroppen ikke lenger klarer å restituere seg. Kjennetegn: vedvarende prestasjonsnedgang, utmattelse, humørsvingninger, økt hvilepuls, søvnproblemer og økt sykdomsrisiko. Kan ta måneder å komme seg av (Gjerset m.fl., 2012, s. 50–51).
-
-KONKLUSJON
-Riktig treningsbelastning kombinert med tilstrekkelig restitusjon gir superkompensasjon og fremgang. Ignoreres restitusjon, kan kortvarig overreaching utvikle seg til kronisk overtrening med store negative konsekvenser for utøverens helse og prestasjon.`,
-    sources: 'Gjerset, A., Haugen, K. & Holmstad, P. (2012). Treningslære 2. Gyldendal Norsk Forlag, s. 40–51.'
-  },
-  {
-    badge: '1C',
-    question: 'Velg en idrettsaktivitet. Gjør rede for to øvelser du mener kan brukes for å bygge opp god selvtillit hos utøvere i denne idrettsaktiviteten.',
-    tips: '«Gjør rede for» = nevn + definer + beskriv. Bruk Banduras modell for selvtillit som teoretisk grunnlag. Koble øvelsene eksplisitt til kildene til selvtillit.',
-    placeholder: 'Skriv svaret ditt her...\n\nTips: Velg én idrett → presenter Banduras fire kilder (kort) → beskriv øvelse 1 og koble til en kilde → beskriv øvelse 2 og koble til en annen kilde.',
-    modelAnswer: `INNLEDNING
-Selvtillit er troen på egne evner til å gjennomføre en bestemt oppgave. I idrett er selvtillit avgjørende for prestasjon. Jeg tar utgangspunkt i håndball og presenterer to øvelser basert på Banduras (1997, gjengitt i Pensgaard & Hollingen, 2006, s. 45) modell for selvtillit.
-
-BANDURAS FIRE KILDER TIL SELVTILLIT
-Bandura beskriver fire kilder:
-1. Mestringsopplevelse (egne erfaringer med å lykkes) – sterkeste kilde
-2. Vikarierende erfaring (se andre lykkes)
-3. Verbal overtalelse (oppmuntring fra trener/lagkamerater)
-4. Fysiologisk og emosjonell tilstand
-
-ØVELSE 1 – Graderte skuddøvelser (kilde: mestringsopplevelse)
-Spillerne øver på avslutninger fra posisjoner der de nesten alltid scorer – nær mål, uten keeper, med god tid. Vanskegraden økes gradvis etter hvert som spilleren mestrer. Denne øvelsen benytter Banduras sterkeste kilde: mestringsopplevelse. Å lykkes gang på gang gir utøveren konkrete bevis på egne ferdigheter, noe som bygger stabil selvtillit (Pensgaard & Hollingen, 2006, s. 45–46).
-
-ØVELSE 2 – Videoanalyse av egne vellykkede prestasjoner (kilde: vikarierende erfaring + fysiologisk tilstand)
-Spillerne ser videoklipp av sine egne gode prestasjoner fra trening og kamp. Treneren guider utøveren til å gjenkjenne hva som ble gjort riktig. Dette aktiverer to av Banduras kilder: utøveren ser "seg selv som modell" (vikarierende erfaring) og kjenner igjen den positive emosjonelle tilstanden ved suksess (fysiologisk tilstand). Metoden brukes blant annet av Olympiatoppen (Pensgaard & Hollingen, 2006, s. 47).
-
-KONKLUSJON
-Begge øvelsene er forankret i Banduras teori og adresserer ulike kilder til selvtillit. Kombinasjonen av konkret mestring i trening og bevisst selvrefleksjon gjennom video er et effektivt verktøy for å styrke selvtilliten i håndball.`,
-    sources: 'Pensgaard, A.M. & Hollingen, E. (2006). Idrettens mentale treningslære. Gyldendal Norsk Forlag, s. 44–50.'
-  },
-  {
-    badge: '1D',
-    question: 'Ta utgangspunkt i en valgt idrettsaktivitet. Gjør rede for de største forskjellene mellom treningsinnholdet i en forberedelsesperiode, en konkurranseperiode og en aktiv avkoblingsperiode.',
-    tips: 'Velg én idrett og hold deg til den gjennom hele svaret. Strukturer gjerne med én del per periode. Fokuser på volum, intensitet og treningsinnhold i hver periode.',
-    placeholder: 'Skriv svaret ditt her...\n\nTips: Innledning med valg av idrett → Forberedelsesperiode (kjennetegn) → Konkurranseperiode (kjennetegn) → Aktiv avkoblingsperiode (kjennetegn) → Konklusjon om hvorfor periodisering er viktig.',
-    modelAnswer: `INNLEDNING
-Periodisering handler om å organisere treningen i ulike perioder med forskjellig innhold og belastning for å nå toppform til riktig tidspunkt (Gjerset m.fl., 2012, s. 57). Jeg tar utgangspunkt i fotball.
-
-FORBEREDELSESPERIODE
-Forberedelsesperioden er årets første treningsperiode, typisk vinter/vår for fotballspillere. Kjennetegn:
-• Høyt treningsvolum, lav til moderat intensitet
-• Fokus på å bygge opp grunnleggende aerob utholdenhet, generell styrke og tekniske basisferdigheter
-• Mye allsidig trening og grunnlagsarbeid
-• Lite spesifikt kamprelatert arbeid
-
-Målet er å legge et solid fundament som konkurranseperioden kan bygges på.
-
-KONKURRANSEPERIODE
-Konkurranseperioden er sesongen da kampene spilles. Kjennetegn:
-• Lavt treningsvolum, høy intensitet
-• Spesifikt treningsinnhold: taktiske øvelser, kamprelatert trening, pasningsspill med press
-• Fokus på å opprettholde og toppe formen
-• Innholdet ligner så mye som mulig på krav i konkurranse (spesifisitetsprinsippet)
-
-Volum reduseres fordi kroppen ikke tåler høy intensitet og høyt volum over lang tid. Selve kampene er en del av treningsbelastningen.
-
-AKTIV AVKOBLINGSPERIODE
-Etter sesongens slutt innføres aktiv avkoblingsperiode. Kjennetegn:
-• Svært lav treningsbelastning
-• Stor variasjon – gjerne andre aktiviteter enn fotball
-• Fokus på fysisk og psykisk restitusjon
-• Ingen konkurranse, ingen krav
-
-"Aktiv" betyr at utøveren fortsatt er i bevegelse – total inaktivitet er negativt fordi form og helse tapes raskt.
-
-KONKLUSJON
-De tre periodene er ulike i volum, intensitet og innhold fordi kroppen trenger ulike stimuli gjennom året. En riktig periodisering sikrer at fotballspilleren er på topp når det gjelder som mest – i konkurranseperioden.`,
-    sources: 'Gjerset, A., Haugen, K. & Holmstad, P. (2012). Treningslære 2. Gyldendal Norsk Forlag, s. 57–61.'
-  },
-  {
-    badge: 'Oppgave 2',
-    op2: true,
-    question: 'Ta utgangspunkt i en valgt idrettsaktivitet, og vurder påstanden:\n\n"I den valgte idrettsaktiviteten din er det ingen av treningsprinsippene som er viktigere enn de andre."',
-    tips: '«Vurder» = fremstill ulike synspunkter, begrunn, se konsekvenser. Du skal IKKE bare si om du er enig eller uenig – vis at du ser begge sider, og trekk en begrunnet konklusjon. Dette er den store oppgaven (~50% av karakteren).',
-    placeholder: 'Skriv svaret ditt her...\n\nStruktur: Innledning (velg idrett, beskriv hva oppgaven spør om) → Presenter alle/de viktigste prinsippene kort → Argumenter FOR påstanden → Argumenter MOT påstanden → Konklusjon med begrunnelse.',
-    modelAnswer: `INNLEDNING
-Treningsprinsippene er grunnleggende retningslinjer for all systematisk trening. Jeg tar utgangspunkt i langrenn og vurderer om alle prinsippene er like viktige, eller om noen er mer avgjørende enn andre.
-
-DE 10 TRENINGSPRINSIPPENE (kort oversikt)
-1. Belastning og tilpasning, 2. Restitusjon, 3. Overkompensasjon/superkompensasjon, 4. Periodisering, 5. Variasjon, 6. Progresjon, 7. Individuell og helhetlig stimulering, 8. Spesifisitet, 9. Styring og kontroll, 10. Kontinuitet (Gjerset m.fl., 2012, s. 42–49).
-
-FOR PÅSTANDEN – prinsippene er like viktige
-Man kan argumentere for at alle prinsippene henger tett sammen og er gjensidig avhengige. Brytes ett prinsipp, svekkes effekten av de andre. Eksempel: trener man hardt (belastning) uten restitusjon, oppstår overtrening uavhengig av om de andre prinsippene følges. Ingen enkelt prinsipp kan alene sikre fremgang – de utgjør et helhetlig system.
-
-MOT PÅSTANDEN – noen prinsipper er viktigere i langrenn
-Langrenn er en aerob utholdenhetsdisiplin der store treningsvolum over lang tid er avgjørende. Følgende prinsipper kan fremheves som særlig kritiske:
-
-Spesifisitetsprinsippet er sentralt: langrennsløpere må trene aerob kapasitet og spesifikk langrenns-teknikk, ikke for eksempel sprinttrening. All annen trening gir liten overføringsverdi til konkurransen.
-
-Kontinuitetsprinsippet er kritisk i langrenn: langrennsform bygges over år. Norges beste langrennsløpere trener 600–900 timer per år over mange år. Avbrudd i treningen gir raskt nedgang i aerob kapasitet.
-
-Periodiseringsprinsippet styrer hele sesongen: tidspunktet for toppform (VM, OL) avgjøres av riktig periodisering. Uten god periodisering kan man ikke nå toppen på riktig tidspunkt.
-
-Variasjonsprinsippet er derimot relativt mindre kritisk i langrenn sammenlignet med tekniske idretter: langrennsløpere kan tåle mer monoton trening fordi belastningen er lavintensivt og belaster kroppen mer jevnt.
-
-KONKLUSJON
-Påstanden er delvis riktig fordi alle prinsippene er nødvendige og henger sammen. Likevel er prinsippene ikke like viktige i langrenn. Spesifisitet, kontinuitet og periodisering er særlig avgjørende fordi formen i langrenn bygges over tid gjennom stor mengde spesifikk trening, og topping av form til riktig tidspunkt er kritisk. Variasjonsprinsippet er fortsatt viktig, men veier litt lettere enn i tekniske idretter. En god langrennsutøver kan ikke utelate noen prinsipper – men prioriteringen av dem vil variere.`,
-    sources: 'Gjerset, A., Haugen, K. & Holmstad, P. (2012). Treningslære 2. Gyldendal Norsk Forlag, s. 42–61.'
-  }
+  { badge:'1A', question:'Nevn to idrettsaktiviteter som stiller krav til spenst. Gjør rede for en test du mener er god i den ene idrettsaktiviteten, men ikke den andre. Begrunn svaret.', tips:'«Gjør rede for» = nevn + definer + beskriv. Koble testen til idrettens krav (validitet).', placeholder:'Skriv svaret ditt her...', modelAnswer:`INNLEDNING\nSpenst er evnen til å utvikle stor kraft i løpet av kort tid og er en sentral egenskap i mange idretter. Jeg tar for meg volleyball og svømming, og vurderer om CMJ er egnet for begge.\n\nIDRETTENES KRAV TIL SPENST\nVolleyball krever vertikal spenst – spillerne hopper gjentatte ganger for å smasje og blokkere (Gjerset m.fl., 2012, s. 102).\n\nSvømming krever primært aerob utholdenhet og kraft i vannet. Vertikal spenst er lite relevant for selve svømmeprestasjon.\n\nTESTEN: CMJ (Counter Movement Jump)\nCMJ er en vertikal spenst-test der utøveren raskt senker seg ned og hopper rett opp. Testen måler eksplosiv vertikal kraft og utnyttelse av strekk-forkortningssyklusen (Gjerset m.fl., 2012, s. 103).\n\nVURDERING\nCMJ er valid for volleyball fordi testen måler nettopp det idretten krever – vertikal spenst. Høy score korrelerer med bedre prestasjon i kamp.\n\nCMJ er ikke valid for svømmere fordi en god score ikke sier noe om svømmeprestasjon. Testen mangler validitet i denne sammenhengen (Gjerset m.fl., 2012, s. 98).\n\nKONKLUSJON\nCMJ er en god test for volleyball fordi den er valid. For svømmere gir testen lite nyttig informasjon.`, sources:'Gjerset, A., Haugen, K. & Holmstad, P. (2012). Treningslære 2. Gyldendal, s. 98–103.' },
+  { badge:'1B', question:'Gjør rede for sammenhengen mellom treningsbelastning, restitusjon og overtrening.', tips:'Bruk superkompensasjon som rød tråd. Vis at du forstår sammenhengen – definer alle tre begrepene.', placeholder:'Skriv svaret ditt her...', modelAnswer:`INNLEDNING\nFor å utvikle seg som utøver må man finne balansen mellom nok treningsbelastning og tilstrekkelig restitusjon. Velter denne balansen, risikerer man overtrening.\n\nTRENINGSBELASTNING\nTreningsbelastning er summen av volum (mengde), intensitet (hardhet) og frekvens (antall økter) (Gjerset m.fl., 2012, s. 40). En belastning over det kroppen er vant til er nødvendig for å utløse tilpasning.\n\nRESTITUSJON OG SUPERKOMPENSASJON\nEtter trening repareres skader og kroppen bygger seg opp sterkere enn før – superkompensasjon (Gjerset m.fl., 2012, s. 44). Det er under restitusjon, ikke under selve treningen, at fremgangen skjer.\n\nKONSEKVENSER AV UBALANSE\n1. Overreaching: kortvarig overbelastning. Tretthet og lett prestasjonsnedgang. Rettes opp med noen ekstra hviledager (Gjerset m.fl., 2012, s. 50).\n\n2. Overtrening: langvarig tilstand der kroppen ikke klarer å restituere seg. Vedvarende prestasjonsnedgang, utmattelse, humørsvingninger, økt hvilepuls, søvnproblemer. Kan ta måneder å komme seg av (Gjerset m.fl., 2012, s. 50–51).\n\nKONKLUSJON\nRiktig belastning + tilstrekkelig restitusjon = superkompensasjon og fremgang. Ignoreres restitusjon, kan overreaching utvikle seg til kronisk overtrening.`, sources:'Gjerset, A., Haugen, K. & Holmstad, P. (2012). Treningslære 2. Gyldendal, s. 40–51.' },
+  { badge:'1C', question:'Velg en idrettsaktivitet. Gjør rede for to øvelser du mener kan brukes for å bygge opp god selvtillit hos utøvere i denne idrettsaktiviteten.', tips:'Bruk Banduras fire kilder til selvtillit som teori. Koble hver øvelse til én kilde.', placeholder:'Skriv svaret ditt her...', modelAnswer:`INNLEDNING\nSelvtillit er troen på egne evner til å gjennomføre en bestemt oppgave. Jeg tar utgangspunkt i håndball og presenterer to øvelser basert på Banduras modell (Pensgaard & Hollingen, 2006, s. 45).\n\nBANDURAS FIRE KILDER (kort)\n1. Mestringsopplevelse – sterkeste kilde\n2. Vikarierende erfaring\n3. Verbal overtalelse\n4. Fysiologisk og emosjonell tilstand\n\nØVELSE 1 – Graderte skuddøvelser (kilde: mestringsopplevelse)\nSpillerne øver på avslutninger fra posisjoner der de nesten alltid scorer – nær mål, uten keeper, med god tid. Vanskegraden økes gradvis. Å lykkes gang på gang gir utøveren konkrete bevis på egne ferdigheter, noe som bygger stabil selvtillit (Pensgaard & Hollingen, 2006, s. 45–46).\n\nØVELSE 2 – Videoanalyse av egne vellykkede prestasjoner (kilde: vikarierende erfaring)\nSpillerne ser videoklipp av sine egne gode prestasjoner. Treneren guider utøveren til å gjenkjenne hva som ble gjort riktig. Utøveren ser «seg selv som modell» og kjenner igjen den positive emosjonelle tilstanden ved suksess (Pensgaard & Hollingen, 2006, s. 47).\n\nKONKLUSJON\nBegge øvelsene er forankret i Banduras teori og adresserer ulike kilder til selvtillit. Kombinasjonen av konkret mestring og selvrefleksjon er effektivt for å styrke selvtilliten i håndball.`, sources:'Pensgaard, A.M. & Hollingen, E. (2006). Idrettens mentale treningslære. Gyldendal, s. 44–50.' },
+  { badge:'1D', question:'Ta utgangspunkt i en valgt idrettsaktivitet. Gjør rede for de største forskjellene mellom treningsinnholdet i en forberedelsesperiode, en konkurranseperiode og en aktiv avkoblingsperiode.', tips:'Velg én idrett og hold deg til den. Strukturer med én del per periode – volum, intensitet, innhold.', placeholder:'Skriv svaret ditt her...', modelAnswer:`INNLEDNING\nPeriodisering handler om å organisere treningen i perioder med ulikt innhold for å nå toppform til riktig tidspunkt (Gjerset m.fl., 2012, s. 57). Jeg tar utgangspunkt i fotball.\n\nFORBEREDELSESPERIODE\nFørstkommende periode, typisk vinter/vår:\n• Høyt treningsvolum, lav til moderat intensitet\n• Fokus på aerob utholdenhet, generell styrke og tekniske basisferdigheter\n• Mye allsidig trening, lite kamprelatert arbeid\n\nKONKURRANSEPERIODE\nSesongen der kampene spilles:\n• Lavt volum, høy intensitet\n• Spesifikt treningsinnhold: taktiske øvelser, kamprelatert trening\n• Innholdet ligner konkurransen (spesifisitetsprinsippet)\n• Selve kampene er en del av treningsbelastningen\n\nAKTIV AVKOBLINGSPERIODE\nEtter sesongens slutt:\n• Svært lav treningsbelastning\n• Stor variasjon – gjerne andre aktiviteter enn fotball\n• Fokus på fysisk og psykisk restitusjon\n• «Aktiv» betyr fortsatt bevegelse – total inaktivitet er negativt\n\nKONKLUSJON\nDe tre periodene er ulike i volum, intensitet og innhold fordi kroppen trenger ulike stimuli gjennom året. Riktig periodisering sikrer at fotballspilleren er på topp i konkurranseperioden.`, sources:'Gjerset, A., Haugen, K. & Holmstad, P. (2012). Treningslære 2. Gyldendal, s. 57–61.' },
+  { badge:'Oppgave 2', op2:true, question:'Ta utgangspunkt i en valgt idrettsaktivitet, og vurder påstanden:\n\n"I den valgte idrettsaktiviteten din er det ingen av treningsprinsippene som er viktigere enn de andre."', tips:'«Vurder» = fremstill BEGGE sider, begrunn, trekk konklusjon. Dette er den store oppgaven (~50% av karakteren). Ikke bare si ja eller nei – vis at du kan se nyansene.', placeholder:'Skriv svaret ditt her...', modelAnswer:`INNLEDNING\nTreningsprinsippene er grunnleggende retningslinjer for systematisk trening. Jeg tar utgangspunkt i langrenn og vurderer om alle prinsippene er like viktige, eller om noen veier tyngre.\n\nDE 10 TRENINGSPRINSIPPENE\nBelastning og tilpasning, restitusjon, overkompensasjon, periodisering, variasjon, progresjon, individuell stimulering, spesifisitet, styring og kontroll, kontinuitet (Gjerset m.fl., 2012, s. 42–49).\n\nFOR PÅSTANDEN – prinsippene er like viktige\nAlle prinsippene henger tett sammen og er gjensidig avhengige. Brytes ett, svekkes effekten av de andre. Ingen enkelt prinsipp kan alene sikre fremgang – de utgjør et helhetlig system.\n\nMOT PÅSTANDEN – noen prinsipper er viktigere i langrenn\nLangrenn er en aerob utholdenhetsdisiplin der store treningsvolum over tid er avgjørende.\n\nSpesifisitetsprinsippet er sentralt: langrennsløpere må trene aerob kapasitet og spesifikk langrenns-teknikk. All annen trening gir liten overføringsverdi.\n\nKontinuitetsprinsippet er kritisk: langrennsform bygges over år. Norges beste løpere trener 600–900 timer per år over mange år. Avbrudd gir raskt nedgang i aerob kapasitet.\n\nPeriodiseringsprinsippet styrer hele sesongen: toppform til VM/OL avhenger av riktig periodisering.\n\nVariasjonsprinsippet er relativt mindre kritisk i langrenn enn i tekniske idretter – langrennsløpere tåler mer monoton trening fordi belastningen er jevnere fordelt.\n\nKONKLUSJON\nPåstanden er delvis riktig fordi alle prinsippene er nødvendige. Likevel er spesifisitet, kontinuitet og periodisering særlig avgjørende i langrenn. Prioriteringen av prinsippene vil alltid avhenge av idrettens egenart.`, sources:'Gjerset, A., Haugen, K. & Holmstad, P. (2012). Treningslære 2. Gyldendal, s. 42–61.' }
 ];
 
-// ─── STATE ───────────────────────────────────────────────────────────────────
+// ─── STATE & STORAGE ─────────────────────────────────────────────────────────
 
 let currentTopic = 'alle';
 let filteredCards = [...CARDS];
+let originalOrder = [...CARDS];
 let currentIndex = 0;
 let isFlipped = false;
+let shuffleOn = false;
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
+// ─── ROBUST STORAGE (localStorage med backup + versjonering) ─────────────────
+// Feilsikker mot quota-errors, JSON-parse-feil og manglende localStorage
 
-function init() {
-  renderCard();
-  renderExam();
+const STORAGE_VERSION = 2;
+const STORAGE_KEY = 'tl_state_v2';
+
+function defaultState() {
+  return {
+    version: STORAGE_VERSION,
+    ratings: {},          // kortindex → kan/usikker/kanIkke
+    examAnswers: {},      // oppgaveindex → tekst
+    droftingAnswers: {},  // drofting-index → tekst
+    sport: '',
+    streakDays: 0,
+    lastActiveDate: '',   // ISO-dato yyyy-mm-dd
+    totalRated: 0,
+    updated: Date.now()
+  };
 }
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      // Migrasjon fra gamle nøkler om de finnes
+      const oldRatings = localStorage.getItem('tl_ratings');
+      const oldSport = localStorage.getItem('tl_sport');
+      const s = defaultState();
+      if (oldRatings) try { s.ratings = JSON.parse(oldRatings); } catch {}
+      if (oldSport) s.sport = oldSport;
+      saveState(s);
+      return s;
+    }
+    const parsed = JSON.parse(raw);
+    return { ...defaultState(), ...parsed };
+  } catch (e) {
+    console.error('loadState feilet, starter fra blank:', e);
+    return defaultState();
+  }
+}
+
+let STATE = loadState();
+
+function saveState(s) {
+  try {
+    s = s || STATE;
+    s.updated = Date.now();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+    // Speilkopi i sessionStorage som backup-backup
+    try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch {}
+    return true;
+  } catch (e) {
+    console.error('saveState feilet:', e);
+    showToast('⚠️ Kunne ikke lagre – sjekk nettleser-lagring');
+    return false;
+  }
+}
+
+// Kompatibilitet med eksisterende kode
+function loadRatings() { return STATE.ratings || {}; }
+function saveRatings(r) { STATE.ratings = r; saveState(); }
+
+// Autosave alle 20. sekund for å kompensere for ulike nettleser-quirks
+setInterval(() => saveState(), 20000);
+window.addEventListener('beforeunload', () => saveState());
+window.addEventListener('pagehide', () => saveState());
 
 // ─── MODE ────────────────────────────────────────────────────────────────────
 
-function setMode(mode) {
+function setMode(mode, btn) {
   document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
+  btn.classList.add('active');
   document.getElementById('flashcard-mode').classList.toggle('hidden', mode !== 'flashcard');
+  document.getElementById('drofting-mode').classList.toggle('hidden', mode !== 'drofting');
   document.getElementById('exam-mode').classList.toggle('hidden', mode !== 'exam');
+  document.getElementById('stats-mode').classList.toggle('hidden', mode !== 'stats');
+  if (mode === 'stats') { renderStats(); renderSyncForm(); }
+  if (mode === 'drofting') renderDrofting();
 }
 
 // ─── FILTER ──────────────────────────────────────────────────────────────────
@@ -699,32 +770,45 @@ function filterTopic(topic, btn) {
   currentTopic = topic;
   document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  filteredCards = topic === 'alle' ? [...CARDS] : CARDS.filter(c => c.topic === topic);
-  currentIndex = 0;
+  const ratings = loadRatings();
+  const svakeCount = CARDS.filter((_, i) => !ratings[i] || ratings[i] === 'kanIkke' || ratings[i] === 'usikker').length;
+  if (topic === 'svake' && svakeCount === 0) {
+    showToast('🎉 Ingen svake kort – du kan alt!', 'win');
+    launchConfetti();
+  }
   isFlipped = false;
-  renderCard();
+  applyFilterAndOrder();
 }
 
 // ─── CARDS ───────────────────────────────────────────────────────────────────
 
 function renderCard() {
-  if (filteredCards.length === 0) return;
+  if (!filteredCards.length) return;
   const card = filteredCards[currentIndex];
-  const fc = document.getElementById('flashcard');
-  fc.classList.remove('flipped');
+  const globalIdx = CARDS.indexOf(card);
+  const ratings = loadRatings();
+  const rating = ratings[globalIdx];
+
+  document.getElementById('flashcard').classList.remove('flipped');
   isFlipped = false;
+  resetRecall();
 
   document.getElementById('card-badge').textContent = TOPICS[card.topic];
-  document.getElementById('card-badge').className = 'card-topic-badge';
   document.getElementById('card-badge-back').textContent = TOPICS[card.topic];
-  document.getElementById('card-badge-back').className = 'card-topic-badge';
-
   document.getElementById('card-front').className = `card-face card-front topic-${card.topic}`;
   document.getElementById('card-back').className = `card-face card-back topic-${card.topic}`;
-
   document.getElementById('card-question').textContent = card.q;
   document.getElementById('card-answer').textContent = card.a;
   document.getElementById('card-source').textContent = '📚 ' + card.src;
+
+  // Rating buttons
+  document.querySelectorAll('.rating-btn').forEach(b => {
+    b.classList.remove('selected');
+    if (b.dataset.r === rating) b.classList.add('selected');
+  });
+  document.querySelector('.rating-btn.kan').dataset.r = 'kan';
+  document.querySelector('.rating-btn.usikker').dataset.r = 'usikker';
+  document.querySelector('.rating-btn.kanIkke').dataset.r = 'kanIkke';
 
   const total = filteredCards.length;
   const pct = Math.round(((currentIndex + 1) / total) * 100);
@@ -734,35 +818,332 @@ function renderCard() {
 }
 
 function flipCard() {
-  const fc = document.getElementById('flashcard');
   isFlipped = !isFlipped;
-  fc.classList.toggle('flipped', isFlipped);
+  document.getElementById('flashcard').classList.toggle('flipped', isFlipped);
 }
 
 function nextCard() {
-  if (currentIndex < filteredCards.length - 1) {
-    currentIndex++;
-    renderCard();
-  } else {
-    currentIndex = 0;
-    renderCard();
-  }
+  currentIndex = currentIndex < filteredCards.length - 1 ? currentIndex + 1 : 0;
+  renderCard();
 }
 
 function prevCard() {
-  if (currentIndex > 0) {
-    currentIndex--;
-    renderCard();
+  currentIndex = currentIndex > 0 ? currentIndex - 1 : filteredCards.length - 1;
+  renderCard();
+}
+
+function toggleShuffle() {
+  shuffleOn = !shuffleOn;
+  const btn = document.getElementById('shuffle-btn');
+  const statusEl = document.getElementById('shuffle-status');
+  btn.classList.toggle('on', shuffleOn);
+  statusEl.textContent = shuffleOn ? 'på ✓' : 'av';
+  applyFilterAndOrder();
+  showToast(shuffleOn ? '🔀 Blanding AV → PÅ' : '📋 Rekkefølge: original');
+}
+
+function applyFilterAndOrder() {
+  // re-filtrer og re-shuffle basert på state
+  const ratings = loadRatings();
+  let base;
+  if (currentTopic === 'alle') base = [...CARDS];
+  else if (currentTopic === 'svake') base = CARDS.filter((_, i) => !ratings[i] || ratings[i] === 'kanIkke' || ratings[i] === 'usikker');
+  else base = CARDS.filter(c => c.topic === currentTopic);
+
+  if (!base.length) base = [...CARDS];
+
+  if (shuffleOn) {
+    for (let i = base.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [base[i], base[j]] = [base[j], base[i]];
+    }
+  }
+  filteredCards = base;
+  currentIndex = 0;
+  renderCard();
+}
+
+function rateCard(r) {
+  const card = filteredCards[currentIndex];
+  const globalIdx = CARDS.indexOf(card);
+  const ratings = loadRatings();
+  const prevRating = ratings[globalIdx];
+  ratings[globalIdx] = r;
+  saveRatings(ratings);
+
+  document.querySelectorAll('.rating-btn').forEach(b => {
+    b.classList.remove('selected');
+    if (b.dataset.r === r) b.classList.add('selected');
+  });
+
+  // Gamification: streak + konfetti ved "kan"
+  bumpStreakIfNeeded();
+  if (r === 'kan') {
+    if (prevRating !== 'kan') {
+      launchConfetti();
+      showToast('✅ ' + pickRandom(['Bra jobba!', 'Sterkt!', 'Du er på gli!', 'Keep it up!', 'Du eier dette!']), 'win');
+    } else {
+      showToast('✅ Bekreftet: Kan dette', 'win');
+    }
+  } else {
+    const labels = { usikker: '🤔 Lagret: Usikker', kanIkke: '❌ Øv mer på denne' };
+    showToast(labels[r]);
+  }
+
+  setTimeout(() => nextCard(), 650);
+}
+
+function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// ─── GAMIFICATION: STREAK + KONFETTI ─────────────────────────────────────────
+
+function today() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function bumpStreakIfNeeded() {
+  const t = today();
+  const last = STATE.lastActiveDate;
+  if (last === t) return; // allerede aktiv i dag
+  if (last) {
+    const lastDate = new Date(last);
+    const todayDate = new Date(t);
+    const diffDays = Math.round((todayDate - lastDate) / 86400000);
+    if (diffDays === 1) STATE.streakDays = (STATE.streakDays || 0) + 1;
+    else if (diffDays > 1) STATE.streakDays = 1; // brutt, starter på nytt
+    else STATE.streakDays = STATE.streakDays || 1;
+  } else {
+    STATE.streakDays = 1;
+  }
+  STATE.lastActiveDate = t;
+  saveState();
+  renderStreak();
+}
+
+function renderStreak() {
+  const n = STATE.streakDays || 0;
+  const chip = document.getElementById('streak-chip');
+  document.getElementById('streak-num').textContent = n;
+  chip.classList.toggle('zero', n === 0);
+  chip.title = n === 0 ? 'Ingen streak – vurder ditt første kort!' : `${n} dager på rad 🔥`;
+}
+
+function launchConfetti() {
+  const colors = ['#58cc02', '#8b5cf6', '#ffc800', '#1cb0f6', '#ff4b4b', '#a78bfa'];
+  for (let i = 0; i < 32; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDuration = (1.4 + Math.random() * 1.4) + 's';
+    c.style.animationDelay = Math.random() * 0.2 + 's';
+    c.style.width = (6 + Math.random() * 8) + 'px';
+    c.style.height = (10 + Math.random() * 12) + 'px';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3200);
   }
 }
 
-function shuffleCards() {
-  for (let i = filteredCards.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+// ─── SKY-SYNC (Supabase) ─────────────────────────────────────────────────────
+// Konfigurasjon lagres separat i localStorage (per-enhet), så sync-koden kan
+// være lik på flere enheter for å dele STATE.
+
+const SYNC_CONFIG_KEY = 'tl_sync_config';
+
+function loadSyncConfig() {
+  try { return JSON.parse(localStorage.getItem(SYNC_CONFIG_KEY)) || {}; } catch { return {}; }
+}
+function saveSyncConfig(c) {
+  localStorage.setItem(SYNC_CONFIG_KEY, JSON.stringify(c));
+}
+
+let SYNC = loadSyncConfig(); // { url, anonKey, code, lastSync }
+let syncPushTimer = null;
+let syncInFlight = false;
+
+function isSyncConfigured() {
+  return !!(SYNC.url && SYNC.anonKey && SYNC.code);
+}
+
+async function supabaseRequest(path, options = {}) {
+  const res = await fetch(`${SYNC.url}/rest/v1/${path}`, {
+    ...options,
+    headers: {
+      'apikey': SYNC.anonKey,
+      'Authorization': `Bearer ${SYNC.anonKey}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'resolution=merge-duplicates,return=representation',
+      ...(options.headers || {})
+    }
+  });
+  if (!res.ok) throw new Error(`Supabase ${res.status}: ${await res.text()}`);
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
+
+async function syncPull() {
+  if (!isSyncConfigured()) return;
+  try {
+    syncInFlight = true;
+    updateSyncStatus('Henter fra skyen...');
+    const data = await supabaseRequest(`sync_state?code=eq.${encodeURIComponent(SYNC.code)}&select=state,updated_at`);
+    if (Array.isArray(data) && data.length) {
+      const remote = data[0].state;
+      const remoteTs = new Date(data[0].updated_at).getTime();
+      // Siste-skriver-vinner pr. enhet: behold den nyeste
+      if (remote && remote.updated && remote.updated > (STATE.updated || 0)) {
+        STATE = { ...defaultState(), ...remote };
+        saveState();
+        updateSportBadge();
+        renderStreak();
+        applyFilterAndOrder();
+        renderExam();
+        renderDrofting();
+        if (!document.getElementById('stats-mode').classList.contains('hidden')) renderStats();
+        showToast('☁️ Hentet fra sky', 'win');
+      }
+      SYNC.lastSync = Date.now();
+      saveSyncConfig(SYNC);
+    }
+    updateSyncStatus();
+  } catch (e) {
+    updateSyncStatus('⚠️ Feil ved henting: ' + e.message);
+  } finally {
+    syncInFlight = false;
   }
-  currentIndex = 0;
-  renderCard();
+}
+
+async function syncPush() {
+  if (!isSyncConfigured() || syncInFlight) return;
+  try {
+    syncInFlight = true;
+    await supabaseRequest('sync_state', {
+      method: 'POST',
+      headers: { 'Prefer': 'resolution=merge-duplicates' },
+      body: JSON.stringify({ code: SYNC.code, state: STATE, updated_at: new Date().toISOString() })
+    });
+    SYNC.lastSync = Date.now();
+    saveSyncConfig(SYNC);
+    updateSyncStatus();
+  } catch (e) {
+    updateSyncStatus('⚠️ Feil ved sending: ' + e.message);
+  } finally {
+    syncInFlight = false;
+  }
+}
+
+function scheduleSyncPush() {
+  if (!isSyncConfigured()) return;
+  clearTimeout(syncPushTimer);
+  syncPushTimer = setTimeout(syncPush, 1500); // debounce 1.5 sek
+}
+
+// hook inn i saveState uten å overskrive
+const _origSaveState = saveState;
+saveState = function(s) {
+  const ok = _origSaveState(s);
+  scheduleSyncPush();
+  return ok;
+};
+
+function updateSyncStatus(msg) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  if (!isSyncConfigured()) {
+    el.innerHTML = 'Ikke satt opp ennå. Sett opp for å synke mellom telefon, skole-PC og denne PC-en.';
+    return;
+  }
+  const last = SYNC.lastSync ? new Date(SYNC.lastSync).toLocaleTimeString('no-NO', { hour: '2-digit', minute: '2-digit' }) : 'aldri';
+  el.innerHTML = `✅ Aktiv · Kode: <code style="background:var(--surface3);padding:2px 7px;border-radius:5px;color:var(--duo-green-hi);">${SYNC.code}</code> · Sist synkt: ${last}${msg ? '<br>' + msg : ''}`;
+}
+
+function renderSyncForm() {
+  const form = document.getElementById('sync-form');
+  if (!form) return;
+  const configured = isSyncConfigured();
+  if (configured) {
+    form.innerHTML = `
+      <div class="backup-row" style="justify-content:flex-start;">
+        <button class="reset-btn" onclick="syncPull()">🔄 Hent fra sky</button>
+        <button class="reset-btn" onclick="syncPush()">⬆️ Send til sky</button>
+        <button class="reset-btn" onclick="clearSyncConfig()">⚙️ Endre oppsett</button>
+      </div>
+    `;
+  } else {
+    form.innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <input id="sync-url" placeholder="Supabase Project URL (https://xxx.supabase.co)" style="background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-size:0.85rem; outline:none;"/>
+        <input id="sync-key" placeholder="Supabase anon public key" style="background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-size:0.85rem; outline:none;"/>
+        <input id="sync-code" placeholder="Sync-kode (skriv det samme på alle enheter, f.eks. guffe-tent-x9k)" style="background:var(--bg); border:1.5px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-size:0.85rem; outline:none;"/>
+        <div class="backup-row" style="justify-content:flex-start; margin-top:4px;">
+          <button class="nav-btn primary" onclick="saveSyncForm()" style="box-shadow:0 3px 0 #6d28d9;">🔗 Koble til</button>
+        </div>
+      </div>
+    `;
+  }
+  updateSyncStatus();
+}
+
+function saveSyncForm() {
+  const url = document.getElementById('sync-url').value.trim().replace(/\/$/, '');
+  const key = document.getElementById('sync-key').value.trim();
+  const code = document.getElementById('sync-code').value.trim();
+  if (!url || !key || !code) { showToast('Fyll ut alle tre feltene'); return; }
+  if (!/^https:\/\/.+\.supabase\.co$/.test(url)) { showToast('URL må være https://xxx.supabase.co'); return; }
+  SYNC = { url, anonKey: key, code, lastSync: 0 };
+  saveSyncConfig(SYNC);
+  renderSyncForm();
+  syncPull().then(() => syncPush());
+  showToast('🔗 Sync aktiv', 'win');
+}
+
+function clearSyncConfig() {
+  if (!confirm('Fjerne sync-oppsett fra denne enheten? Fremgang blir værende lokalt.')) return;
+  SYNC = {};
+  localStorage.removeItem(SYNC_CONFIG_KEY);
+  renderSyncForm();
+}
+
+// ─── EKSPORT / IMPORT (sikkerhetsnett) ───────────────────────────────────────
+
+function exportState() {
+  const blob = new Blob([JSON.stringify(STATE, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `treningslare-fremgang-${today()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('💾 Fremgang eksportert');
+}
+
+function importState() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const imported = JSON.parse(ev.target.result);
+        if (!imported || typeof imported !== 'object') throw new Error('Ugyldig fil');
+        STATE = { ...defaultState(), ...imported };
+        saveState();
+        updateSportBadge();
+        renderStreak();
+        applyFilterAndOrder();
+        if (document.getElementById('stats-mode').classList.contains('hidden') === false) renderStats();
+        showToast('✅ Fremgang importert', 'win');
+      } catch (err) {
+        showToast('❌ Kunne ikke lese filen');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 
 // ─── EXAM ────────────────────────────────────────────────────────────────────
@@ -771,6 +1152,7 @@ function renderExam() {
   const container = document.getElementById('exam-list');
   container.innerHTML = '';
   EXAM_TASKS.forEach((task, i) => {
+    const saved = (STATE.examAnswers && STATE.examAnswers[i]) || '';
     const div = document.createElement('div');
     div.className = 'exam-task';
     div.innerHTML = `
@@ -780,9 +1162,12 @@ function renderExam() {
       </div>
       <div class="exam-tips">💡 <span>Husk:</span> ${task.tips}</div>
       <div class="answer-area">
-        <textarea placeholder="${task.placeholder}" rows="6"></textarea>
+        <textarea id="answer-${i}" placeholder="${task.placeholder}" rows="7" oninput="saveExamAnswer(${i}, this.value)"></textarea>
       </div>
-      <button class="reveal-btn" onclick="revealAnswer(${i}, this)">Vis modellsvar med kildehenvisning</button>
+      <div class="exam-actions">
+        <button class="reveal-btn" onclick="revealAnswer(${i}, this)">Vis modellsvar</button>
+        <button class="claude-btn" onclick="sendToClaude(${i})">✦ Få tilbakemelding fra Claude</button>
+      </div>
       <div class="model-answer" id="model-${i}">
         <h4>Modellsvar</h4>
         <div class="model-answer-text">${task.modelAnswer}</div>
@@ -790,27 +1175,199 @@ function renderExam() {
       </div>
     `;
     container.appendChild(div);
+    document.getElementById(`answer-${i}`).value = saved;
   });
+}
+
+function saveExamAnswer(i, val) {
+  STATE.examAnswers = STATE.examAnswers || {};
+  STATE.examAnswers[i] = val;
+  saveState();
 }
 
 function revealAnswer(i, btn) {
   const el = document.getElementById(`model-${i}`);
   const visible = el.classList.toggle('visible');
-  btn.textContent = visible ? 'Skjul modellsvar' : 'Vis modellsvar med kildehenvisning';
+  btn.textContent = visible ? 'Skjul modellsvar' : 'Vis modellsvar';
+}
+
+function sendToClaude(i) {
+  const task = EXAM_TASKS[i];
+  const answer = document.getElementById(`answer-${i}`).value.trim();
+  if (!answer) {
+    showToast('Skriv svaret ditt først, så sender vi det til Claude');
+    return;
+  }
+  const sport = getSport() || 'ikke spesifisert';
+  const prompt = `Du er en Treningslære 2-lærer på norsk VG3 (LK20). Gi konkret og konstruktiv tilbakemelding på dette tentamensvaret fra en elev.
+
+ELEVENS VALGTE IDRETT: ${sport}
+
+OPPGAVE:
+${task.question}
+
+ELEVENS SVAR:
+${answer}
+
+Gi tilbakemelding på:
+1. Faglig innhold og korrekthet
+2. Bruk av fagterminologi fra Treningslære 2
+3. Struktur og argumentasjon
+4. Kildebruk
+5. Hva som mangler eller bør utdypes
+6. Tentativ karakter (1–6) med kort begrunnelse
+
+Vær konkret og støttende – eleven forbereder seg til tentamen på fredag.`;
+
+  navigator.clipboard.writeText(prompt).then(() => {
+    window.open('https://claude.ai', '_blank');
+    showToast('✦ Prompt kopiert! Lim inn i Claude (Ctrl+V)');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = prompt;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    window.open('https://claude.ai', '_blank');
+    showToast('✦ Prompt kopiert! Lim inn i Claude (Ctrl+V)');
+  });
+}
+
+// ─── STATS ───────────────────────────────────────────────────────────────────
+
+function renderStats() {
+  const ratings = loadRatings();
+  const topicKeys = Object.keys(TOPICS);
+  const grid = document.getElementById('stats-grid');
+  grid.innerHTML = '';
+
+  let totalKan = 0, totalUsikker = 0, totalKanIkke = 0, totalUrated = 0;
+  CARDS.forEach((_, i) => {
+    const r = ratings[i];
+    if (r === 'kan') totalKan++;
+    else if (r === 'usikker') totalUsikker++;
+    else if (r === 'kanIkke') totalKanIkke++;
+    else totalUrated++;
+  });
+
+  const pct = Math.round((totalKan / CARDS.length) * 100);
+  const ringCirc = 2 * Math.PI * 60; // r=60
+  const ringOffset = ringCirc - (pct / 100) * ringCirc;
+
+  const overall = document.createElement('div');
+  overall.className = 'stat-card';
+  overall.innerHTML = `
+    <h3>Din mestring</h3>
+    <div class="ring-wrap" style="position:relative;">
+      <svg class="ring-svg" viewBox="0 0 150 150">
+        <defs>
+          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#58cc02"/>
+            <stop offset="100%" stop-color="#7ee030"/>
+          </linearGradient>
+        </defs>
+        <circle class="ring-bg" cx="75" cy="75" r="60" stroke-width="12" fill="none"/>
+        <circle class="ring-fg" cx="75" cy="75" r="60" stroke-width="12" fill="none" stroke-dasharray="${ringCirc}" stroke-dashoffset="${ringOffset}"/>
+      </svg>
+      <div class="ring-center" style="top:50%; left:50%; transform:translate(-50%,-50%);">
+        <div class="ring-pct">${pct}%</div>
+        <div class="ring-sub">${totalKan}/${CARDS.length} mestret</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:18px; flex-wrap:wrap;">
+      <div class="big-stat"><div class="big-number kan">${totalKan}</div><div class="big-label">Kan</div></div>
+      <div class="big-stat"><div class="big-number usikker">${totalUsikker}</div><div class="big-label">Usikker</div></div>
+      <div class="big-stat"><div class="big-number kanIkke">${totalKanIkke}</div><div class="big-label">Kan ikke</div></div>
+      <div class="big-stat"><div class="big-number urated">${totalUrated}</div><div class="big-label">Ikke øvd</div></div>
+    </div>
+  `;
+  grid.appendChild(overall);
+
+  // Streak-kort
+  const streak = document.createElement('div');
+  streak.className = 'stat-card';
+  const days = STATE.streakDays || 0;
+  streak.innerHTML = `
+    <h3>🔥 Daglig streak</h3>
+    <div style="text-align:center; padding:20px 0;">
+      <div style="font-size:4.5rem; line-height:1;">${days > 0 ? '🔥' : '🌱'}</div>
+      <div style="font-size:2.5rem; font-weight:800; color:var(--duo-gold); margin-top:8px;">${days}</div>
+      <div style="font-size:0.85rem; color:var(--muted); margin-top:4px; font-weight:600;">${days === 1 ? 'dag' : 'dager'} på rad</div>
+      <div style="font-size:0.75rem; color:var(--muted2); margin-top:12px; line-height:1.5;">${days === 0 ? 'Vurder ditt første kort i dag!' : 'Hold den gående — øv litt hver dag fram til fredag'}</div>
+    </div>
+  `;
+  grid.appendChild(streak);
+
+  // Per-topic card
+  const topicCard = document.createElement('div');
+  topicCard.className = 'stat-card';
+  topicCard.innerHTML = `<h3>Per tema</h3>`;
+
+  topicKeys.forEach(t => {
+    const cards = CARDS.map((c, i) => ({ c, i })).filter(({ c }) => c.topic === t);
+    const kan = cards.filter(({ i }) => ratings[i] === 'kan').length;
+    const total = cards.length;
+    const pct = total ? Math.round(kan / total * 100) : 0;
+    topicCard.innerHTML += `
+      <div class="stat-row">
+        <div class="stat-label" style="color:${TOPIC_COLORS[t]}">${TOPICS[t]}</div>
+        <div class="mini-bar-wrap">
+          <div class="mini-bar" style="width:${pct}%; background:${TOPIC_COLORS[t]}"></div>
+        </div>
+        <div class="stat-counts">${kan}/${total}</div>
+      </div>
+    `;
+  });
+  grid.appendChild(topicCard);
+}
+
+function resetAll() {
+  if (confirm('Nullstille all fremgang? Dette kan ikke angres.\n\nTips: Eksporter først om du vil ha en sikkerhetskopi.')) {
+    STATE = defaultState();
+    saveState();
+    renderStats();
+    renderStreak();
+    applyFilterAndOrder();
+    showToast('Fremgang nullstilt');
+  }
+}
+
+// ─── TOAST ───────────────────────────────────────────────────────────────────
+
+let toastTimer;
+function showToast(msg, variant) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  t.classList.toggle('win', variant === 'win');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.classList.remove('show'); t.classList.remove('win'); }, 2200);
 }
 
 // ─── KEYBOARD ────────────────────────────────────────────────────────────────
 
 document.addEventListener('keydown', e => {
   if (document.getElementById('flashcard-mode').classList.contains('hidden')) return;
+  if (e.target.tagName === 'TEXTAREA') return;
   if (e.key === 'ArrowRight') nextCard();
   if (e.key === 'ArrowLeft') prevCard();
   if (e.key === ' ') { e.preventDefault(); flipCard(); }
+  if (e.key === '1') rateCard('kan');
+  if (e.key === '2') rateCard('usikker');
+  if (e.key === '3') rateCard('kanIkke');
 });
 
-// ─── START ───────────────────────────────────────────────────────────────────
+// ─── INIT ────────────────────────────────────────────────────────────────────
 
-init();
+updateSportBadge();
+renderStreak();
+if (isSyncConfigured()) syncPull();
+if (!getSport()) {
+  setTimeout(openSportModal, 400);
+}
+renderCard();
+renderExam();
 </script>
 </body>
 </html>
